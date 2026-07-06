@@ -2,21 +2,18 @@
 
 This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. **Start with the quick setup below**; everything else is reference.
 
-# Quick setup
+# Quick Setup
 
-Five minutes to your first session, with OpenCode Go as the default model provider:
+Five minutes to your first session, with OpenCode Go as the default model provider.
 
-> **Prerequisite — set up the prompt-and-rules half first**: install the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) in your project before continuing. It provides `.opencode/agents/*.md` thin wrappers with real OpenCode model IDs and full prompt bodies (via `@.claude/agents-snippets/<name>.md`) for the 14 custom agents in this starter. OpenCode auto-discovers those agents and their `.md` definitions win for model + prompt body; the `oh-my-opencode-slim.jsonc` `orchestratorPrompt` routing hints still layer on top. **Without the toolkit, the 14 custom agents only get the one-liner descriptions from `oh-my-opencode-slim.jsonc` — no full prompt bodies.** This is a deliberate design choice, not an oversight: the toolkit is the source of truth for the custom-agent prompts, and this starter is the runtime half of the stack.
+> **Prerequisite: set up the prompt-and-rules half first.** Install the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) in your project before continuing. It ships `.opencode/agents/*.md` thin wrappers (real OpenCode model IDs, full prompt bodies via `@.claude/agents-snippets/<name>.md`) for the 14 custom agents in this starter. OpenCode auto-discovers those files. The `.md` definitions provide the model + prompt body; the `oh-my-opencode-slim.jsonc` `orchestratorPrompt` routing hint layers on top. Without the toolkit, the 14 custom agents only get the one-liner descriptions from `oh-my-opencode-slim.jsonc`.
 
 - [ ] **Install OpenCode**: macOS/Linux: `curl -fsSL https://opencode.ai/install | bash`. Windows: WSL is recommended; native scoop/choco/npm also work.
 - [ ] **Install the two plugins**: `bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`. Install `bun` first with `npm i -g bun` if you don't have it.
-- [ ] **Subscribe to OpenCode Go**: $5 first month, then $10/month. Sign up at [opencode.ai/go](https://opencode.ai/go) and grab your API key.
+- [ ] **Copy the two config files** ([opencode.jsonc](./opencode.jsonc) and [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc)) into the root of your project. They are the source of truth for plugins, presets, and the 14 custom agent prompts. Skip this step if you are starting from this starter (the files are already there).
+- [ ] **Subscribe to OpenCode Go**: $5 first month, then $10/month. Sign up at [opencode.ai/go?ref=8N581SYDM0](https://opencode.ai/go?ref=8N581SYDM0) and grab your API key.
 - [ ] **Connect in the TUI**: `opencode`, then `/connect`, pick "OpenCode", paste your key. (Stored at `~/.local/share/opencode/auth.json`: never commit it.)
-- [ ] **Run from a project dir**: `cd` to your project, then `opencode`. The `default` preset routes most agents to `opencode-go/*` models, with broader Zen models as fallbacks. The 14 custom agents now have full prompt bodies from `.opencode/agents/*.md` (the toolkit you installed in the prerequisite).
-
-That's the whole path. The callout below is a heads-up for reading the rest; the section after that explains why this starter is opinionated.
-
-> **Model prefix convention**: `opencode-go/` = billed through your Go subscription. `opencode/` = billed pay-as-you-go on Zen. **No prefix = also Zen** (this starter is not fully consistent about including the prefix in every table below: treat any bare model name like `glm-5.2` or `minimax-m3` as `opencode/glm-5.2` unless stated otherwise). If you're auditing spend, grep for the prefix before assuming a model is free.
+- [ ] **Run from a project dir**: `cd` to your project, then `opencode`. The `default` preset routes most agents to `opencode-go/*` models, with broader Zen models as fallbacks.
 
 # Full Guide
 
@@ -26,11 +23,13 @@ That's the whole path. The callout below is a heads-up for reading the rest; the
 2. **Fallback: OpenCode models.** When Go is unavailable (rate limit, billing paused, model down), the agents fall through to the broader OpenCode model family: Zen pay-as-you-go and the free models on it.
 3. You may switch to `balanced` (mid-cost Go-leaning mix), `high-cost` (frontier-only), or `low-cost` (free-only) presets as your workload changes. Switching requires restarting Opencode (see the `/preset` bug note below).
 
-The `default` preset in `oh-my-opencode-slim.jsonc` is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
+The `default` preset in [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
 
-If you'd rather not subscribe to Go, the starter still works with Zen or BYO providers: the table below spells out the trade-offs. The opinionated defaults here are tuned for Go; the other paths get the same agent fleet with different billing.
+If you would rather not subscribe to Go, the starter still works with Zen or BYO providers: the table below spells out the trade-offs. The opinionated defaults here are tuned for Go; the other paths get the same agent fleet with different billing.
 
 ## Pick your connection
+
+**TL;DR**: this starter assumes **Go** (one bill, default model, broad coverage) with certain **Zen** models as fallbacks. Pick **Zen** if you will mix free and paid models and want to bypass Opencode Go. Pick **BYO** if you are privacy-first or air-gapped and willing to bring your own provider keys.
 
 OpenCode is one tool; how you connect it to models is the real choice. Three paths:
 
@@ -42,8 +41,6 @@ OpenCode is one tool; how you connect it to models is the real choice. Three pat
 
 The Go model catalog is public: `https://opencode.ai/zen/go/v1/models`.
 
-**TL;DR**: this starter assumes **Go** (one bill, default model, broad coverage) with certain **Zen** models as fallbacks. Pick **Zen** if you'll mix free and paid models and want to bypass Opencode Go. Pick **BYO** if you're privacy-first or air-gapped and willing to bring your own provider keys.
-
 ## Install OpenCode
 
 | OS      | Recommended                                                        | Alternative                                                                                  |
@@ -52,7 +49,7 @@ The Go model catalog is public: `https://opencode.ai/zen/go/v1/models`.
 | Linux   | `curl -fsSL https://opencode.ai/install \| bash`                   | `brew install anomalyco/tap/opencode` (works on Linux too) or `npm i -g opencode-ai@latest`  |
 | Windows | **WSL is recommended.** Inside WSL, run the macOS/Linux curl line. | Native: `scoop install opencode`, `choco install opencode`, or `npm i -g opencode-ai@latest` |
 
-> **Heads-up**: `curl | bash` is the official path. If you're cautious, run `curl -fsSL https://opencode.ai/install | less` first, then pipe it to `bash`.
+> **Heads-up**: `curl | bash` is the official path. If you are cautious, run `curl -fsSL https://opencode.ai/install | less` first, then pipe it to `bash`.
 
 Verify:
 
@@ -74,7 +71,7 @@ bunx oh-my-opencode-slim@latest install
 npm i -g @dietrichgebert/ponytail
 ```
 
-Re-running `bunx oh-my-opencode-slim@latest install` is the upgrade path. If you don't have `bun` yet, install it with `npm i -g bun` first.
+Re-running `bunx oh-my-opencode-slim@latest install` is the upgrade path. If you do not have `bun` yet, install it with `npm i -g bun` first.
 
 ## Authenticate
 
@@ -86,25 +83,25 @@ opencode
 # pick a provider, follow the prompts
 ```
 
-For OpenCode Go: sign in at [opencode.ai](https://opencode.ai), subscribe to Go, then `/connect` and pick "OpenCode". Your key is stored at `~/.local/share/opencode/auth.json`: never paste it into a chat or commit it.
+For OpenCode Go: sign in at [opencode.ai](https://opencode.ai), subscribe to Go at [opencode.ai/go?ref=8N581SYDM0](https://opencode.ai/go?ref=8N581SYDM0), then `/connect` and pick "OpenCode". Your key is stored at `~/.local/share/opencode/auth.json`: never paste it into a chat or commit it.
 
 ## Where your config lives
 
-OpenCode looks for config in many places; the project file walks up to the nearest `.git`. For this starter, the two files that matter are the project-root `opencode.jsonc` and `oh-my-opencode-slim.jsonc`.
+OpenCode looks for config in many places; the project file walks up to the nearest `.git`. For this starter, the two files that matter are the project-root [opencode.jsonc](./opencode.jsonc) and [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc).
 
-OpenCode also auto-discovers agent definitions from any `.opencode/agent/*.md` or `.opencode/agents/*.md` file under a `.opencode/` directory in the project tree. The [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) (see the Quick setup prerequisite) ships 14 such files — one per custom agent in this starter — and those `.md` definitions win for prompt body, model, mode, and permission. See [Meet the agent fleet](#meet-the-agent-fleet) for the merge order.
+OpenCode also auto-discovers agent definitions from any `.opencode/agent/*.md` or `.opencode/agents/*.md` file under a `.opencode/` directory in the project tree. The [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) (see the Quick setup prerequisite) ships 14 such files: one per custom agent in this starter.
 
-| OS      | Global config                                                                     | Auth                                            | Project file      |
-| ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------- |
-| macOS   | `~/.config/opencode/opencode.json`                                                | `~/.local/share/opencode/auth.json`             | `./opencode.json` |
-| Linux   | `~/.config/opencode/opencode.json` (or `$XDG_CONFIG_HOME/opencode/opencode.json`) | `~/.local/share/opencode/auth.json`             | `./opencode.json` |
-| Windows | `%USERPROFILE%\.config\opencode\opencode.json`                                    | `%USERPROFILE%\.local\share\opencode\auth.json` | `./opencode.json` |
+| OS      | Global config                                                                     | Auth                                            | Project file                          |
+| ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------- |
+| macOS   | `~/.config/opencode/opencode.json`                                                | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc)  |
+| Linux   | `~/.config/opencode/opencode.json` (or `$XDG_CONFIG_HOME/opencode/opencode.json`) | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc)  |
+| Windows | `%USERPROFILE%\.config\opencode\opencode.json`                                    | `%USERPROFILE%\.local\share\opencode\auth.json` | [./opencode.jsonc](./opencode.jsonc)  |
 
-If you're inside a project with an `opencode.json` / `opencode.jsonc`, that takes precedence. Otherwise, OpenCode falls back to the global file. The full config-resolution order is in [opencode.ai/docs/config](https://opencode.ai/docs/config).
+If you are inside a project with an `opencode.json` / `opencode.jsonc`, that takes precedence. Otherwise, OpenCode falls back to the global file. The full config-resolution order is in [opencode.ai/docs/config](https://opencode.ai/docs/config).
 
 ## Minimal config files
 
-The repo ships two config files. You don't have to read the full versions: these minimal snippets are enough to start.
+The repo ships two config files. You do not have to read the full versions: these minimal snippets are enough to start. If you are using this starter as a template, the full files ([opencode.jsonc](./opencode.jsonc) is 19 lines, [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is ~1,500 lines) are the source of truth and can be copied verbatim into your project root.
 
 ### `opencode.jsonc`
 
@@ -126,7 +123,7 @@ The repo ships two config files. You don't have to read the full versions: these
 }
 ```
 
-This disables OpenCode's built-in `build` and `general` agents so they don't fight with the slim fleet.
+This disables OpenCode's built-in `build` and `general` agents so they do not fight with the slim fleet.
 
 ### `oh-my-opencode-slim.jsonc`
 
@@ -183,20 +180,9 @@ This disables OpenCode's built-in `build` and `general` agents so they don't fig
 }
 ```
 
-> **Note on `reasoningEffort`**: set it per-model inside the model array (as above), not at the agent level. Setting it on the agent applies it to every model in the fallback chain: including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain. Confirm this object-array shape against the current schema version before relying on it; if unsupported, split the agent into two rather than over-applying effort to the whole chain.
-
-> **Why prompts and models are split**: the top-level `agents.<name>.orchestratorPrompt` defines the agent's role (read once at startup, doesn't change between presets). The `presets.<name>.<agent>.model` array defines which models the agent runs on for that preset. This separation is what makes it possible to ship all four presets in a single file. See the deprecation note in `Switch presets` for the caveat.
+> **Note on `reasoningEffort`**: set it per-model inside the model array (as above), not at the agent level. Setting it on the agent applies it to every model in the fallback chain, including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain. Confirm this object-array shape against the current schema version before relying on it; if unsupported, split the agent into two rather than over-applying effort to the whole chain.
 
 The `fallback` block is what slim uses when an agent has no model list of its own. 15 seconds is the timeout before it gives up and asks the user.
-
-### Reference: full config
-
-The full `opencode.jsonc` is 19 lines; the full `oh-my-opencode-slim.jsonc` is ~1,500 lines (it consolidates all four presets and all 22 agents in one file). Both are tracked in this repo and are the source of truth:
-
-- `opencode.jsonc`: the complete project config.
-- `oh-my-opencode-slim.jsonc`: the complete agent roster, all four presets, and the fallback block.
-
-Don't paste the full files into your project if you're starting from scratch; just point your `opencode.jsonc` at the same plugins and copy `oh-my-opencode-slim.jsonc` verbatim. If you change either, the README's tables need a re-check (see Validating).
 
 ## Switch presets
 
@@ -218,13 +204,9 @@ Useful for CI or for testing a preset without changing the saved config. The env
 
 Picks from `default`, `balanced`, `high-cost`, `low-cost`.
 
-> **Known bug**: as of v2.1.0, the `/preset` slash command has a runtime issue ([alvinunreal/oh-my-opencode-slim#438](https://github.com/alvinunreal/oh-my-opencode-slim/issues/438)) where switching presets can orphan the plugin-registered agents (`Orchestrator`, `Oracle`, etc.). Use the env var, or restart OpenCode after switching.
->
-> **Deprecation note**: the plugin's own docs flag the top-level `agents.<name>.model` field as deprecated in favor of `presets.<name>.<agent>.model`. This starter uses the top-level `agents` key for the static `orchestratorPrompt` only (no model assignment), and the per-preset `model` arrays live entirely under `presets.*.<agent>`. When the plugin removes the top-level key, only the `orchestratorPrompt` entries will need to move (a search-and-replace, not a redesign). Track [#488](https://github.com/alvinunreal/oh-my-opencode-slim/issues/488) and [#512](https://github.com/alvinunreal/oh-my-opencode-slim/issues/512) for the timing.
-
 ## Cost snapshot by preset
 
-Rough monthly shape, assuming a single active developer. These are directional, not billed guarantees: actual spend depends on usage volume:
+Rough monthly shape, assuming a single active developer. These are directional, not billed guarantees: actual spend depends on usage volume.
 
 | Preset      | Shape                                                                                                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -233,20 +215,22 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 | `high-cost` | Go flat fee **plus** metered frontier calls (Claude Opus/Sonnet, GPT-5.x, Gemini Pro) on Zen: expect this to be the most expensive preset by a wide margin under heavy use. |
 | `low-cost`  | $0 beyond the Go subscription itself: every agent is pinned to a free model. Trade-off is slower iteration and weaker output on hard tasks.                                 |
 
-## Meet the agent fleet
+# Meet the agent fleet
 
-This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrator / oracle / designer / fixer / explorer / librarian / council / observer backbone that the plugin provides) plus **14 custom agents** that are the project's specialization layer. The 14 custom agent names and roles are fixed across presets; only their model assignments change. The 8 built-in agents also vary by preset (`default` ships 6, `high-cost` adds `observer`, `low-cost` adds `council` and pins the others to single free models). The per-preset tables below show the exact roster and the default-preset model assignments; the other three presets are in the tracked `oh-my-opencode-slim.jsonc` under `presets.<name>.<agent>`.
+22 agents run per preset: 8 built-in (orchestrator, oracle, designer, fixer, explorer, librarian, observer, council) plus 14 custom. The 14 custom agents have static `orchestratorPrompt` routing hints in [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). When the NITM AI-Assisted Development Toolkit is installed (see the Quick setup prerequisite), each custom agent's full prompt body and model come from the toolkit's `.opencode/agents/<name>.md` and override the JSON. The per-preset built-in agent rosters and model assignments are below; the custom agent roles are stable across presets.
 
-> **Two sources for the 14 custom agents — which one wins?** The 14 custom agents in this starter are defined in two places, and OpenCode merges them. Order of precedence (highest first):
->
-> 1. **`.opencode/agents/<name>.md`** — auto-discovered by OpenCode (`{agent,agents}/**/*.md` glob). Per the Quick setup prerequisite, the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) is installed in your project, so this is where the agents actually live: real OpenCode model IDs, `mode`, `temperature`, `permission`, and a full prompt body via the `@.claude/agents-snippets/<name>.md` reference.
-> 2. **`oh-my-opencode-slim.jsonc` `agents.<name>.orchestratorPrompt` + `presets.<name>.<agent>.model`** — what OMO slim contributes. The `orchestratorPrompt` (routing hint) is layered on top regardless. The `model` array is **overridden** by the `.md` file's `model` field due to OMO slim's `config()` hook doing `{ ...pluginAgent, ...existing }` (existing wins).
->
-> **Practical consequence**: the 14 custom agents use the `.md`'s static model regardless of which preset is active. The 4 presets then only meaningfully differ for the 8 built-in agents (orchestrator, oracle, council, designer, fixer, explorer, librarian, observer). The `oh-my-opencode-slim.jsonc` model arrays for the 14 custom agents still serve as a fallback for the rare case where the toolkit isn't installed.
+Built-in agent rosters by preset:
 
-### The preset agents (roster and assignments vary by preset)
+| Preset      | Built-in roster                                                                |
+| ----------- | ------------------------------------------------------------------------------ |
+| `default`   | orchestrator, oracle, designer, fixer, explorer, librarian (6)                 |
+| `balanced`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
+| `high-cost` | orchestrator, oracle, designer, fixer, explorer, librarian, observer (7)      |
+| `low-cost`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
 
-#### `default` preset
+## The Presets
+
+### `default` Preset
 
 | Agent          | Primary                           | Fallback 1                        | Fallback 2                             |
 | -------------- | --------------------------------- | --------------------------------- | -------------------------------------- |
@@ -257,11 +241,24 @@ This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrato
 | `explorer`     | `opencode/mimo-v2.5-free`         | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
 | `librarian`    | `opencode/mimo-v2.5-free`         | `opencode-go/minimax-m3`          | `opencode/deepseek-v4-flash-free`      |
 
-> **Changed from the original defaults** (see model-evidence notes below): `orchestrator` and `oracle` no longer fall back to `glm-5.2` (confirmed steerability regression: bad fit for NL-heavy roles). `deepseek-v4-pro`, the strongest independently-verified model in the pool, is now reachable one hop sooner on `orchestrator`. `designer` now leads with `glm-5.2` (its #1 Design Arena ranking is exactly designer's job, and designer isn't steerability-sensitive); `kimi-k2.7-code` moved to fallback and is flagged **unverified**: its benchmarks are vendor-reported only, no independent numbers yet. `librarian`'s fallback 2 previously duplicated its primary (`mimo-v2.5-free` twice): that's fixed to an actual third option.
->
-> Evidence for `explorer`, `librarian`, and `orchestrator`-specific routing (as opposed to general model quality) is thin: no external benchmark targets these roles directly. Treat those three as best-effort until you've run your own A/B tests on real workload.
+### `balanced` Preset
 
-#### `high-cost` preset (frontier models: costs scale with usage; expect this preset to be materially more expensive than `default`, since every fallback is a metered frontier model with no free tier to land on)
+Mid-cost Go-leaning mix. All 8 built-in agents are active.
+
+| Agent          | Primary                                       | Fallback 1                                    | Fallback 2                                    |
+| -------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+| `orchestrator` | `opencode-go/minimax-m3` (variant: high)      | `opencode/claude-sonnet-5` (medium)           | `opencode-go/mimo-v2.5-pro` (variant: max)    |
+| `oracle`       | `opencode-go/glm-5.2` (variant: max)          | `opencode-go/mimo-v2.5-pro` (high)            | `opencode/gpt-5.5` (medium)                   |
+| `designer`     | `opencode/claude-sonnet-5` (medium)           | `opencode-go/glm-5.2` (medium)                | `opencode-go/minimax-m3` (high)               |
+| `fixer`        | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/deepseek-v4-pro` (high)          | `opencode/qwen3.7-plus` (high)                |
+| `explorer`     | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/deepseek-v4-flash` (high)        |
+| `librarian`    | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/minimax-m3` (high)               |
+| `observer`     | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/minimax-m3` (high)               |
+| `council`      | `opencode-go/deepseek-v4-pro` (variant: max)  | `opencode-go/kimi-k2.7-code` (max)            | `opencode-go/glm-5.2` (max)                   |
+
+### `high-cost` Preset
+
+Frontier models: costs scale with usage; expect this preset to be materially more expensive than `default`, since every fallback is a metered frontier model with no free tier to land on.
 
 | Agent          | Primary                             | Fallback 1                        | Fallback 2                             |
 | -------------- | ----------------------------------- | --------------------------------- | -------------------------------------- |
@@ -273,25 +270,25 @@ This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrato
 | `librarian`    | `opencode/gpt-5.4-mini`             | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
 | `observer`     | `opencode/gpt-5.4-mini`             | `opencode/gemini-3.5-flash`       | `opencode-go/minimax-m3`               |
 
-`observer` is a 7th agent unique to this preset: not part of the base 6.
+`observer` is the 7th agent unique to this preset: not part of the base 6.
 
-#### `low-cost` preset (free models pinned to one provider each)
+### `low-cost` Preset
 
-Every preset agent in `low-cost` is pinned to a single model, at zero marginal cost beyond the Go subscription:
+Every preset agent in `low-cost` is pinned to a single model, at zero marginal cost beyond the Go subscription.
 
 | Agent(s)                                 | Model                             | Notes                                       |
 | ---------------------------------------- | --------------------------------- | ------------------------------------------- |
-| `orchestrator`, `designer`               | `opencode-go/minimax-m3`          | :                                           |
+| `orchestrator`, `designer`               | `opencode-go/minimax-m3`          |                                             |
 | `oracle`, `council`, `fixer`, `observer` | `opencode/mimo-v2.5-free`         | `fixer` and `observer` run at variant `max` |
 | `explorer`, `librarian`                  | `opencode/deepseek-v4-flash-free` | variant `high`                              |
 
-`council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and isn't documented elsewhere in this README beyond this table. If you're relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked `oh-my-opencode-slim.jsonc` rather than assuming parity with `oracle`.
+`council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and is not documented elsewhere in this README beyond this table. If you are relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) rather than assuming parity with `oracle`.
 
-### The 14 custom agents (names + roles are fixed; model assignments vary by preset)
+## The Custom Agents
 
-Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked `oh-my-opencode-slim.jsonc`. The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each agent come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
+Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each agent come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
 
-#### Codegen
+### Codegen
 
 | Agent                 | When to call it                                                               |
 | --------------------- | ----------------------------------------------------------------------------- |
@@ -303,20 +300,20 @@ Grouped by lane. Lane assignments and one-liners are derived from the agent name
 | `@refactor`           | Tech-debt cleanup. Behavior-preserving.                                       |
 | `@implementer`        | General-purpose fallback. When nothing else fits.                             |
 
-#### Review
+### Review
 
 | Agent       | When to call it                                   |
 | ----------- | ------------------------------------------------- |
 | `@red`      | Red-team / critique. Steelman, then attack.       |
 | `@reviewer` | Code review. Style, correctness, security, tests. |
 
-#### Ops
+### Ops
 
 | Agent           | When to call it                                      |
 | --------------- | ---------------------------------------------------- |
 | `@admin-portal` | Admin UIs and dashboards. Forms, tables, role gates. |
 
-#### Research / docs
+### Research / docs
 
 | Agent             | When to call it                                                                 |
 | ----------------- | ------------------------------------------------------------------------------- |
@@ -325,9 +322,9 @@ Grouped by lane. Lane assignments and one-liners are derived from the agent name
 | `@researcher`     | Tech research. Compare libraries, read docs, summarize.                         |
 | `@documenter`     | Docs, READMEs, runbooks. The person you call to write the thing you just wrote. |
 
-## Bonus commands
+# Bonus Commands
 
-### ponytail
+## ponytail
 
 `@dietrichgebert/ponytail` ships with these slash commands:
 
@@ -340,7 +337,7 @@ Grouped by lane. Lane assignments and one-liners are derived from the agent name
 
 Set the default for every new session with the `PONYTAIL_DEFAULT_MODE` env var (or a `defaultMode` field in `~/.config/ponytail/config.json`). See [the ponytail README](https://github.com/DietrichGebert/ponytail) for the philosophy.
 
-### Telemetry
+# Telemetry
 
 `oh-my-opencode-slim` sends anonymous usage telemetry. Opt out with:
 
@@ -350,13 +347,13 @@ export OMO_SEND_ANONYMOUS_TELEMETRY=0
 
 Or `OMO_DISABLE_POSTHOG=1`: both work. Drop one in your `~/.zshrc` / `~/.bashrc` / shell profile of choice.
 
-### Edge cases
+# Edge cases
 
-- **No Node?** The curl installer is the only path that doesn't need Node first. Install Node LTS, then come back.
+- **No Node?** The curl installer is the only path that does not need Node first. Install Node LTS, then come back.
 - **Behind a corporate proxy?** OpenCode respects `HTTPS_PROXY` / `HTTP_PROXY`. Set them like any other CLI tool.
 - **Running outside a project dir?** OpenCode walks up to the nearest `.git` looking for `opencode.json`, then falls back to `~/.config/opencode/opencode.json`. If neither is found, it uses the defaults.
 
-## Validating
+# Validating
 
 A quick smoke test:
 
@@ -380,12 +377,12 @@ For ongoing maintenance, this README is checked by:
 - **`markdownlint`** with a custom config (100-col soft wrap, allow `<details>`).
 - **`lychee`** for external link checks.
 - **A JSON-parse snippet check** that extracts every fenced ` ```jsonc ` block, strips `//` comments, and asserts the result is valid.
-- **A preset-table cross-check** that reads `oh-my-opencode-slim.jsonc` and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows. **Also cross-check against `.opencode/agents/*.md`** when present in the same repo (i.e. if the NITM AI-Assisted Development Toolkit is vendored here): the 14 custom agents' `name`, `model`, `mode`, and `permission` keys should be consistent across both sources — `oh-my-opencode-slim.jsonc` is the fallback when `.opencode/agents/` is absent.
+- **A preset-table cross-check** that reads [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows. Cross-check against `.opencode/agents/*.md` when present in the same repo (i.e. if the NITM AI-Assisted Development Toolkit is vendored here): the 14 custom agents' `name`, `model`, `mode`, and `permission` keys should be consistent across both sources. [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is the fallback when `.opencode/agents/` is absent.
 
-## Related
+# Related
 
 - [OpenCode docs](https://opencode.ai/docs)
-- [OpenCode Go subscription](https://opencode.ai/go)
+- [OpenCode Go subscription](https://opencode.ai/go?ref=8N581SYDM0)
 - [OpenCode config reference](https://opencode.ai/docs/config)
 - [Go model catalog (JSON)](https://opencode.ai/zen/go/v1/models)
 - [oh-my-opencode-slim on GitHub](https://github.com/alvinunreal/oh-my-opencode-slim)
@@ -393,5 +390,5 @@ For ongoing maintenance, this README is checked by:
 - [ponytail on npm](https://www.npmjs.com/package/@dietrichgebert/ponytail)
 - [ponytail on GitHub](https://github.com/DietrichGebert/ponytail)
 - **[NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)**: Cursor rules, GitHub Copilot instructions, `AGENTS.md` templates, and bundled skills (TDD, debugging, etc.). Use it for the prompt-and-rules half of the stack; this repo is the OpenCode-runtime half.
-- `opencode.jsonc` (in this repo): full project config
-- `oh-my-opencode-slim.jsonc` (in this repo): full preset + agent config
+- [opencode.jsonc](./opencode.jsonc) (in this repo): full project config
+- [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) (in this repo): full preset + agent config
