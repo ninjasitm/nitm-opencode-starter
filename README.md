@@ -2,7 +2,7 @@
 
 This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. **Start with the quick setup below**; everything else is reference.
 
-## Quick setup (OpenCode Go + Zen fallback path)
+# Quick setup
 
 Five minutes to your first session, with OpenCode Go as the default model provider:
 
@@ -18,7 +18,7 @@ That's the whole path. The callout below is a heads-up for reading the rest; the
 
 > **Model prefix convention**: `opencode-go/` = billed through your Go subscription. `opencode/` = billed pay-as-you-go on Zen. **No prefix = also Zen** (this starter is not fully consistent about including the prefix in every table below: treat any bare model name like `glm-5.2` or `minimax-m3` as `opencode/glm-5.2` unless stated otherwise). If you're auditing spend, grep for the prefix before assuming a model is free.
 
-## Start here: this is an opinionated starter
+# Full Guide
 
 **This is an opinionated starter, not a general guide.** The recommended path for this repo:
 
@@ -137,7 +137,11 @@ This disables OpenCode's built-in `build` and `general` agents so they don't fig
 	"presets": {
 		"default": {
 			"orchestrator": {
-				"model": ["opencode-go/minimax-m3", "opencode/deepseek-v4-pro", "opencode/mimo-v2.5-pro"],
+				"model": [
+					"opencode-go/minimax-m3",
+					"opencode/deepseek-v4-pro",
+					"opencode/mimo-v2.5-pro",
+				],
 			},
 			"fixer": {
 				"model": [
@@ -153,9 +157,15 @@ This disables OpenCode's built-in `build` and `general` agents so they don't fig
 			// see the tracked file. The "balanced", "high-cost", and "low-cost" presets
 			// follow the same shape with different model assignments per agent.
 		},
-		"balanced": { /* same agent roster, mid-cost model assignments */ },
-		"high-cost": { /* same agent roster, frontier-only model assignments */ },
-		"low-cost": { /* same agent roster, free-only model assignments */ },
+		"balanced": {
+			/* same agent roster, mid-cost model assignments */
+		},
+		"high-cost": {
+			/* same agent roster, frontier-only model assignments */
+		},
+		"low-cost": {
+			/* same agent roster, free-only model assignments */
+		},
 	},
 	"agents": {
 		"admin-portal": {
@@ -219,7 +229,7 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 | Preset      | Shape                                                                                                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default`   | ~$10/mo flat (Go subscription) + occasional Zen pay-as-you-go overage when Go falls back.                                                                                   |
-| `balanced`  | Go flat fee + a mid-cost mix of Zen models (some frontier calls for hard tasks, some free/flash for routine work). Expect ~$10–30/mo under steady use.                       |
+| `balanced`  | Go flat fee + a mid-cost mix of Zen models (some frontier calls for hard tasks, some free/flash for routine work). Expect ~$10–30/mo under steady use.                      |
 | `high-cost` | Go flat fee **plus** metered frontier calls (Claude Opus/Sonnet, GPT-5.x, Gemini Pro) on Zen: expect this to be the most expensive preset by a wide margin under heavy use. |
 | `low-cost`  | $0 beyond the Go subscription itself: every agent is pinned to a free model. Trade-off is slower iteration and weaker output on hard tasks.                                 |
 

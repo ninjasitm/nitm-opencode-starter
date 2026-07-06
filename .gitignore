@@ -1,0 +1,21 @@
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets / local config
+.env
+.env.local
+.env.*.local
+
+# Node / bun
+node_modules/
+
+# Local OpenCode overrides (the tracked config is opencode.jsonc)
+opencode.json
+
+# Project-local interview notes (untracked by design)
+interview/
