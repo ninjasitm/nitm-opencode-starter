@@ -91,11 +91,11 @@ OpenCode looks for config in many places; the project file walks up to the neare
 
 OpenCode also auto-discovers agent definitions from any `.opencode/agent/*.md` or `.opencode/agents/*.md` file under a `.opencode/` directory in the project tree. The [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) (see the Quick setup prerequisite) ships 14 such files: one per custom agent in this starter.
 
-| OS      | Global config                                                                     | Auth                                            | Project file                          |
-| ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------- |
-| macOS   | `~/.config/opencode/opencode.json`                                                | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc)  |
-| Linux   | `~/.config/opencode/opencode.json` (or `$XDG_CONFIG_HOME/opencode/opencode.json`) | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc)  |
-| Windows | `%USERPROFILE%\.config\opencode\opencode.json`                                    | `%USERPROFILE%\.local\share\opencode\auth.json` | [./opencode.jsonc](./opencode.jsonc)  |
+| OS      | Global config                                                                     | Auth                                            | Project file                         |
+| ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------ |
+| macOS   | `~/.config/opencode/opencode.json`                                                | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc) |
+| Linux   | `~/.config/opencode/opencode.json` (or `$XDG_CONFIG_HOME/opencode/opencode.json`) | `~/.local/share/opencode/auth.json`             | [./opencode.jsonc](./opencode.jsonc) |
+| Windows | `%USERPROFILE%\.config\opencode\opencode.json`                                    | `%USERPROFILE%\.local\share\opencode\auth.json` | [./opencode.jsonc](./opencode.jsonc) |
 
 If you are inside a project with an `opencode.json` / `opencode.jsonc`, that takes precedence. Otherwise, OpenCode falls back to the global file. The full config-resolution order is in [opencode.ai/docs/config](https://opencode.ai/docs/config).
 
@@ -199,7 +199,7 @@ Useful for CI or for testing a preset without changing the saved config. The env
 **Slash command** (inside the OpenCode TUI):
 
 ```
-/preset
+/preset <name>
 ```
 
 Picks from `default`, `balanced`, `high-cost`, `low-cost`.
@@ -221,11 +221,11 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 
 Built-in agent rosters by preset:
 
-| Preset      | Built-in roster                                                                |
-| ----------- | ------------------------------------------------------------------------------ |
-| `default`   | orchestrator, oracle, designer, fixer, explorer, librarian (6)                 |
+| Preset      | Built-in roster                                                                   |
+| ----------- | --------------------------------------------------------------------------------- |
+| `default`   | orchestrator, oracle, designer, fixer, explorer, librarian (6)                    |
 | `balanced`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
-| `high-cost` | orchestrator, oracle, designer, fixer, explorer, librarian, observer (7)      |
+| `high-cost` | orchestrator, oracle, designer, fixer, explorer, librarian, observer (7)          |
 | `low-cost`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
 
 ## The Presets
@@ -245,16 +245,16 @@ Built-in agent rosters by preset:
 
 Mid-cost Go-leaning mix. All 8 built-in agents are active.
 
-| Agent          | Primary                                       | Fallback 1                                    | Fallback 2                                    |
-| -------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| `orchestrator` | `opencode-go/minimax-m3` (variant: high)      | `opencode/claude-sonnet-5` (medium)           | `opencode-go/mimo-v2.5-pro` (variant: max)    |
-| `oracle`       | `opencode-go/glm-5.2` (variant: max)          | `opencode-go/mimo-v2.5-pro` (high)            | `opencode/gpt-5.5` (medium)                   |
-| `designer`     | `opencode/claude-sonnet-5` (medium)           | `opencode-go/glm-5.2` (medium)                | `opencode-go/minimax-m3` (high)               |
-| `fixer`        | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/deepseek-v4-pro` (high)          | `opencode/qwen3.7-plus` (high)                |
-| `explorer`     | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/deepseek-v4-flash` (high)        |
-| `librarian`    | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/minimax-m3` (high)               |
-| `observer`     | `opencode/mimo-v2.5-free` (high)              | `opencode/deepseek-v4-flash-free` (high)      | `opencode-go/minimax-m3` (high)               |
-| `council`      | `opencode-go/deepseek-v4-pro` (variant: max)  | `opencode-go/kimi-k2.7-code` (max)            | `opencode-go/glm-5.2` (max)                   |
+| Agent          | Primary                                      | Fallback 1                               | Fallback 2                                 |
+| -------------- | -------------------------------------------- | ---------------------------------------- | ------------------------------------------ |
+| `orchestrator` | `opencode-go/minimax-m3` (variant: high)     | `opencode/claude-sonnet-5` (medium)      | `opencode-go/mimo-v2.5-pro` (variant: max) |
+| `oracle`       | `opencode-go/glm-5.2` (variant: max)         | `opencode-go/mimo-v2.5-pro` (high)       | `opencode/gpt-5.5` (medium)                |
+| `designer`     | `opencode/claude-sonnet-5` (medium)          | `opencode-go/glm-5.2` (medium)           | `opencode-go/minimax-m3` (high)            |
+| `fixer`        | `opencode/deepseek-v4-flash-free` (high)     | `opencode-go/deepseek-v4-pro` (high)     | `opencode/qwen3.7-plus` (high)             |
+| `explorer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/deepseek-v4-flash` (high)     |
+| `librarian`    | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
+| `observer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
+| `council`      | `opencode-go/deepseek-v4-pro` (variant: max) | `opencode-go/kimi-k2.7-code` (max)       | `opencode-go/glm-5.2` (max)                |
 
 ### `high-cost` Preset
 
