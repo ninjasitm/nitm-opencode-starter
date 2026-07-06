@@ -144,6 +144,618 @@
 				"options": {
 					"reasoningEffort": "max"
 				}
+			},
+			"admin-portal": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"api-specialist": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"backend-architect": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"documenter": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"feature-builder": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
+			},
+			"frontend-developer": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"green": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-flash-free",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"implementer": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"planner": {
+				"model": [
+					{
+						"id": "opencode-go/mimo-v2-5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"red": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"refactor": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"researcher": {
+				"model": [
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/qwen-3.7-plus",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"reviewer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"tdd": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/qwen3.7-plus",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
+			}
+		},
+		"balanced": {
+			"orchestrator": {
+				"model": [
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "medium"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"oracle": {
+				"model": [
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/gpt-5.5",
+						"variant": "medium"
+					}
+				],
+				"temperature": 0.1
+			},
+			"council": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"designer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "medium"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "medium"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"explorer": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-flash",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"librarian": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"fixer": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/qwen3.7-plus",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1,
+				"options": {
+					"reasoningEffort": "max"
+				}
+			},
+			"observer": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1,
+				"options": {
+					"reasoningEffort": "max"
+				}
+			},
+			"admin-portal": {
+				"model": [
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"api-specialist": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"backend-architect": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"documenter": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"feature-builder": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
+			},
+			"frontend-developer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"green": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-flash-free",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"implementer": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"planner": {
+				"model": [
+					{
+						"id": "opencode-go/mimo-v2-5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"red": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"refactor": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"researcher": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/qwen-3.7-plus",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"reviewer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"tdd": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode/qwen3.7-plus",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
 			}
 		},
 		"high-cost": {
@@ -154,12 +766,12 @@
 						"variant": "medium"
 					},
 					{
-						"id": "opencode/gpt-5.4",
-						"variant": "max"
+						"id": "opencode/gpt-5.5",
+						"variant": "medium"
 					},
 					{
 						"id": "opencode-go/glm-5.2",
-						"variant": "max"
+						"variant": "medium"
 					}
 				],
 				"temperature": 0.1
@@ -168,15 +780,15 @@
 				"model": [
 					{
 						"id": "opencode/claude-opus-4-8",
-						"variant": "high"
+						"variant": "medium"
 					},
 					{
 						"id": "opencode/gpt-5.5",
-						"variant": "high"
+						"variant": "medium"
 					},
 					{
 						"id": "opencode-go/glm-5.2",
-						"variant": "max"
+						"variant": "medium"
 					}
 				],
 				"temperature": 0.1
@@ -288,6 +900,244 @@
 				"options": {
 					"reasoningEffort": "max"
 				}
+			},
+			"admin-portal": {
+				"model": [
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"api-specialist": {
+				"model": [
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"backend-architect": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"documenter": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"feature-builder": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
+			},
+			"frontend-developer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"green": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-flash-free",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"implementer": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"planner": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/mimo-v2-5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"red": {
+				"model": [
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"refactor": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"researcher": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/qwen-3.7-plus",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"reviewer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"tdd": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/qwen3.7-plus",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.3
 			}
 		},
 		"low-cost": {
@@ -368,247 +1218,289 @@
 				"options": {
 					"reasoningEffort": "max"
 				}
+			},
+			"admin-portal": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"api-specialist": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"backend-architect": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"documenter": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"feature-builder": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "low"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
+			},
+			"frontend-developer": {
+				"model": [
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/glm-5.2",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"green": {
+				"model": [
+					{
+						"id": "opencode-go/deepseek-v4-flash-free",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"implementer": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"planner": {
+				"model": [
+					{
+						"id": "opencode-go/mimo-v2-5-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"red": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.1
+			},
+			"refactor": {
+				"model": [
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"researcher": {
+				"model": [
+					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/qwen-3.7-plus",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"reviewer": {
+				"model": [
+					{
+						"id": "opencode/claude-sonnet-5",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/deepseek-v4-pro",
+						"variant": "max"
+					},
+					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					}
+				],
+				"temperature": 0.1
+			},
+			"tdd": {
+				"model": [
+					{
+						"id": "opencode/deepseek-v4-flash-free",
+						"variant": "high"
+					},
+					{
+						"id": "opencode-go/kimi-k2.7-code",
+						"variant": "max"
+					},
+					{
+						"id": "opencode/qwen3.7-plus",
+						"variant": "max"
+					}
+				],
+				"temperature": 0.3
 			}
 		}
 	},
 	"agents": {
 		"admin-portal": {
-			"model": [
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/minimax-m3",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/glm-5.2",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
+			"orchestratorPrompt": "Build administrator portals with RBAC, system dashboards, reporting, analytics, and operational tooling. Specializes in admin frameworks and monitoring ecosystem tools."
 		},
 		"api-specialist": {
-			"model": [
-				{
-					"id": "opencode/mimo-v2.5-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				},
-				{
-					"id": "opencode/deepseek-v4-flash-free",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
+			"orchestratorPrompt": "Design and implement API architecture, documentation, and developer experience. Use for REST design, GraphQL, OpenAPI specs, SDK generation, API versioning, and integration patterns."
 		},
 		"backend-architect": {
-			"model": [
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/minimax-m3",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
-		},
-		"frontend-developer": {
-			"model": [
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/minimax-m3",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/glm-5.2",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
-		},
-		"implementer": {
-			"model": [
-				{
-					"id": "opencode/deepseek-v4-flash-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/mimo-v2.5-pro",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
-		},
-		"green": {
-			"model": [
-				{
-					"id": "opencode-go/deepseek-v4-flash-free",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/mimo-v2.5-pro",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
-		},
-		"red": {
-			"model": [
-				{
-					"id": "opencode/mimo-v2.5-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.1
-		},
-		"refactor": {
-			"model": [
-				{
-					"id": "opencode/mimo-v2.5-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "max"
-				},
-				{
-					"id": "opencode/mimo-v2.5-free",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
-		},
-		"feature-builder": {
-			"model": [
-				{
-					"id": "opencode/claude-sonnet-5",
-					"variant": "low"
-				},
-				{
-					"id": "opencode/deepseek-v4-flash-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.3
-		},
-		"tdd": {
-			"model": [
-				{
-					"id": "opencode/deepseek-v4-flash-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/kimi-k2.7-code",
-					"variant": "max"
-				},
-				{
-					"id": "opencode/qwen3.7-plus",
-					"variant": "max"
-				}
-			],
-			"temperature": 0.3
-		},
-		"planner": {
-			"model": [
-				{
-					"id": "opencode-go/mimo-v2-5-pro",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/minimax-m3",
-					"variant": "max"
-				},
-				{
-					"id": "opencode/deepseek-v4-flash-free",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
-		},
-		"reviewer": {
-			"model": [
-				{
-					"id": "opencode/claude-sonnet-5",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/mimo-v2.5-pro",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
-		},
-		"researcher": {
-			"model": [
-				{
-					"id": "opencode-go/minimax-m3",
-					"variant": "max"
-				},
-				{
-					"id": "opencode-go/deepseek-v4-pro",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/qwen-3.7-plus",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
+			"orchestratorPrompt": "Design APIs, databases, and server-side architecture. Use for scalable backend systems, data modeling, caching strategies, system design, and infrastructure decisions."
 		},
 		"documenter": {
-			"model": [
-				{
-					"id": "opencode/mimo-v2.5-free",
-					"variant": "high"
-				},
-				{
-					"id": "opencode-go/mimo-v2.5-pro",
-					"variant": "high"
-				}
-			],
-			"temperature": 0.1
+			"orchestratorPrompt": "Analyze codebases and create comprehensive documentation. Use for AGENTS.md, README files, API docs, architecture documentation, and onboarding guides."
+		},
+		"feature-builder": {
+			"orchestratorPrompt": "Coordinate end-to-end feature development using subagents for planning, implementation, and review. Orchestrates the full development lifecycle."
+		},
+		"frontend-developer": {
+			"orchestratorPrompt": "Build user interfaces, implement components, handle state management, and optimize frontend performance. Use for responsive, accessible, and performant web applications."
+		},
+		"green": {
+			"orchestratorPrompt": "Write minimal code to make failing tests pass. Part of the TDD red-green-refactor cycle."
+		},
+		"implementer": {
+			"orchestratorPrompt": "Implement code changes for a specific task. Follow TDD, write tests alongside code, and self-review before reporting completion."
+		},
+		"planner": {
+			"orchestratorPrompt": "Break down feature requests into implementation tasks. Read specifications, analyze codebase patterns, and produce structured plans with dependencies."
+		},
+		"red": {
+			"orchestratorPrompt": "Write failing tests that define expected behavior. Part of the TDD red-green-refactor cycle."
+		},
+		"refactor": {
+			"orchestratorPrompt": "Improve code quality and structure while keeping all tests passing. Part of the TDD red-green-refactor cycle."
+		},
+		"researcher": {
+			"orchestratorPrompt": "Research codebase patterns, dependencies, and technical context. Analyze code structure, find relevant examples, and report findings without making changes."
+		},
+		"reviewer": {
+			"orchestratorPrompt": "Review code changes for correctness, code quality, security, and adherence to project patterns. Provide actionable feedback with specific file and line references. Use immediately after writing or modifying code, or as a quality gate in orchestrated workflows."
+		},
+		"tdd": {
+			"orchestratorPrompt": "Implement a feature using test-driven development with red-green-refactor cycle. Coordinates specialized subagents for writing failing tests, implementing code, and refactoring."
 		}
 	},
 	"fallback": {

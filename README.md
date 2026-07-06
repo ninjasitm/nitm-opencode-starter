@@ -1,6 +1,6 @@
 # NITM Opencode Starter
 
-This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated agent fleet, three presets (`default`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. **Start with the quick setup below**; everything else is reference.
+This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. **Start with the quick setup below**; everything else is reference.
 
 ## Quick setup (OpenCode Go + Zen fallback path)
 
@@ -22,9 +22,9 @@ That's the whole path. The callout below is a heads-up for reading the rest; the
 
 1. **Primary: OpenCode Go.** The $5 first-month / $10/month subscription unlocks the `opencode-go/*` model family on Zen (curated open-coding models with generous limits: 5h rolling $12, weekly $30, monthly $60). Most of the agents in the `default` preset point at Go models first.
 2. **Fallback: OpenCode models.** When Go is unavailable (rate limit, billing paused, model down), the agents fall through to the broader OpenCode model family: Zen pay-as-you-go and the free models on it.
-3. You may choose the `high-cost` preset for planning and reviewing work. Switching right now requires restarting Opencode.
+3. You may switch to `balanced` (mid-cost Go-leaning mix), `high-cost` (frontier-only), or `low-cost` (free-only) presets as your workload changes. Switching requires restarting Opencode (see the `/preset` bug note below).
 
-The `default` preset in `oh-my-opencode-slim.json` is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `high-cost` is frontier-only, `low-cost` is free-only.
+The `default` preset in `oh-my-opencode-slim.json` is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
 
 If you'd rather not subscribe to Go, the starter still works with Zen or BYO providers: the table below spells out the trade-offs. The opinionated defaults here are tuned for Go; the other paths get the same agent fleet with different billing.
 
@@ -130,20 +130,40 @@ This disables OpenCode's built-in `build` and `general` agents so they don't fig
 {
 	"$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
 	"preset": "default",
+	"presets": {
+		"default": {
+			"orchestrator": {
+				"model": ["opencode-go/minimax-m3", "opencode/deepseek-v4-pro", "opencode/mimo-v2.5-pro"],
+			},
+			"fixer": {
+				"model": [
+					{ "model": "opencode/deepseek-v4-flash-free" },
+					{ "model": "opencode-go/deepseek-v4-pro" },
+					{ "model": "opencode/qwen3.7-plus", "reasoningEffort": "max" },
+				],
+			},
+			// 6 more built-in agents (oracle, designer, explorer, librarian, council, observer).
+			// 14 custom agents (admin-portal, api-specialist, backend-architect,
+			// frontend-developer, implementer, green, red, refactor, feature-builder,
+			// tdd, planner, reviewer, researcher, documenter) with their own model arrays:
+			// see the tracked file. The "balanced", "high-cost", and "low-cost" presets
+			// follow the same shape with different model assignments per agent.
+		},
+		"balanced": { /* same agent roster, mid-cost model assignments */ },
+		"high-cost": { /* same agent roster, frontier-only model assignments */ },
+		"low-cost": { /* same agent roster, free-only model assignments */ },
+	},
 	"agents": {
-		"orchestrator": {
-			"model": ["opencode-go/minimax-m3", "deepseek-v4-pro", "mimo-v2.5-pro"],
+		"admin-portal": {
+			"orchestratorPrompt": "Build administrator portals with RBAC, system dashboards, reporting, analytics, and operational tooling. Specializes in admin frameworks and monitoring ecosystem tools.",
 		},
-		"fixer": {
-			"model": [
-				{ "model": "deepseek-v4-flash-free" },
-				{ "model": "opencode-go/deepseek-v4-pro" },
-				{ "model": "opencode/qwen3.7-plus", "reasoningEffort": "max" },
-			],
+		"api-specialist": {
+			"orchestratorPrompt": "Design and implement API architecture, documentation, and developer experience. Use for REST design, GraphQL, OpenAPI specs, SDK generation, API versioning, and integration patterns.",
 		},
-		// 12 more custom agents (admin-portal, api-specialist, backend-architect,
-		// frontend-developer, implementer, green, red, refactor, feature-builder,
-		// tdd, planner, reviewer, researcher, documenter): see the tracked file.
+		// 12 more custom agents, each with an orchestratorPrompt sourced from
+		// ninjasitm/ai-assisted-dev-toolkit's src/repo/.claude/agents/<name>.agent.md.
+		// The prompt is what the orchestrator reads to know when/how to delegate
+		// to this agent; the model assignment lives in presets.<name>.<agent>, not here.
 	},
 	"fallback": { "enabled": true, "timeoutMs": 15000 },
 }
@@ -151,14 +171,16 @@ This disables OpenCode's built-in `build` and `general` agents so they don't fig
 
 > **Note on `reasoningEffort`**: set it per-model inside the model array (as above), not at the agent level. Setting it on the agent applies it to every model in the fallback chain: including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain. Confirm this object-array shape against the current schema version before relying on it; if unsupported, split the agent into two rather than over-applying effort to the whole chain.
 
+> **Why prompts and models are split**: the top-level `agents.<name>.orchestratorPrompt` defines the agent's role (read once at startup, doesn't change between presets). The `presets.<name>.<agent>.model` array defines which models the agent runs on for that preset. This separation is what makes it possible to ship all four presets in a single file. See the deprecation note in `Switch presets` for the caveat.
+
 The `fallback` block is what slim uses when an agent has no model list of its own. 15 seconds is the timeout before it gives up and asks the user.
 
 ### Reference: full config
 
-The full `opencode.jsonc` is 19 lines; the full `oh-my-opencode-slim.json` is 618 lines. Both are tracked in this repo and are the source of truth:
+The full `opencode.jsonc` is 19 lines; the full `oh-my-opencode-slim.json` is ~1,500 lines (it consolidates all four presets and all 22 agents in one file). Both are tracked in this repo and are the source of truth:
 
 - `opencode.jsonc`: the complete project config.
-- `oh-my-opencode-slim.json`: the complete agent roster, all three presets, and the fallback block.
+- `oh-my-opencode-slim.json`: the complete agent roster, all four presets, and the fallback block.
 
 Don't paste the full files into your project if you're starting from scratch; just point your `opencode.jsonc` at the same plugins and copy `oh-my-opencode-slim.json` verbatim. If you change either, the README's tables need a re-check (see Validating).
 
@@ -169,7 +191,7 @@ Two ways:
 **Environment variable** (recommended: the working path today):
 
 ```bash
-OH_MY_OPENCODE_SLIM_PRESET=low-cost opencode
+OH_MY_OPENCODE_SLIM_PRESET=balanced opencode
 ```
 
 Useful for CI or for testing a preset without changing the saved config. The env var takes precedence over the config file's `preset` field.
@@ -180,9 +202,11 @@ Useful for CI or for testing a preset without changing the saved config. The env
 /preset
 ```
 
-Picks from `default`, `high-cost`, `low-cost`.
+Picks from `default`, `balanced`, `high-cost`, `low-cost`.
 
 > **Known bug**: as of v2.1.0, the `/preset` slash command has a runtime issue ([alvinunreal/oh-my-opencode-slim#438](https://github.com/alvinunreal/oh-my-opencode-slim/issues/438)) where switching presets can orphan the plugin-registered agents (`Orchestrator`, `Oracle`, etc.). Use the env var, or restart OpenCode after switching.
+>
+> **Deprecation note**: the plugin's own docs flag the top-level `agents.<name>.model` field as deprecated in favor of `presets.<name>.<agent>.model`. This starter uses the top-level `agents` key for the static `orchestratorPrompt` only (no model assignment), and the per-preset `model` arrays live entirely under `presets.*.<agent>`. When the plugin removes the top-level key, only the `orchestratorPrompt` entries will need to move (a search-and-replace, not a redesign). Track [#488](https://github.com/alvinunreal/oh-my-opencode-slim/issues/488) and [#512](https://github.com/alvinunreal/oh-my-opencode-slim/issues/512) for the timing.
 
 ## Cost snapshot by preset
 
@@ -191,12 +215,13 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 | Preset      | Shape                                                                                                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default`   | ~$10/mo flat (Go subscription) + occasional Zen pay-as-you-go overage when Go falls back.                                                                                   |
+| `balanced`  | Go flat fee + a mid-cost mix of Zen models (some frontier calls for hard tasks, some free/flash for routine work). Expect ~$10–30/mo under steady use.                       |
 | `high-cost` | Go flat fee **plus** metered frontier calls (Claude Opus/Sonnet, GPT-5.x, Gemini Pro) on Zen: expect this to be the most expensive preset by a wide margin under heavy use. |
 | `low-cost`  | $0 beyond the Go subscription itself: every agent is pinned to a free model. Trade-off is slower iteration and weaker output on hard tasks.                                 |
 
 ## Meet the agent fleet
 
-This repo ships **14 custom agents** plus a **preset-agent backbone that varies by preset**: `default` and `high-cost` both run 6 preset agents (`orchestrator`, `oracle`, `designer`, `fixer`, `explorer`, `librarian`); `high-cost` additionally adds a 7th, `observer`; `low-cost` adds an 8th, `council`, in place of a separate oracle. See each preset's table below for the exact roster. The custom agents are the project's specialization layer; the preset agents are the orchestrator / oracle / designer / fixer / explorer / librarian (+ observer / council, where present) backbone.
+This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrator / oracle / designer / fixer / explorer / librarian / council / observer backbone that the plugin provides) plus **14 custom agents** that are the project's specialization layer. The 14 custom agent names and roles are fixed across presets; only their model assignments change. The 8 built-in agents also vary by preset (`default` ships 6, `high-cost` adds `observer`, `low-cost` adds `council` and pins the others to single free models). The per-preset tables below show the exact roster and the default-preset model assignments; the other three presets are in the tracked `oh-my-opencode-slim.json` under `presets.<name>.<agent>`.
 
 ### The preset agents (roster and assignments vary by preset)
 
@@ -241,9 +266,9 @@ Every preset agent in `low-cost` is pinned to a single model, at zero marginal c
 
 `council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and isn't documented elsewhere in this README beyond this table. If you're relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked `oh-my-opencode-slim.json` rather than assuming parity with `oracle`.
 
-### The 14 custom agents (don't vary by preset)
+### The 14 custom agents (names + roles are fixed; model assignments vary by preset)
 
-Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked `oh-my-opencode-slim.json`.
+Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked `oh-my-opencode-slim.json`. The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries.
 
 #### Codegen
 
@@ -334,7 +359,7 @@ For ongoing maintenance, this README is checked by:
 - **`markdownlint`** with a custom config (100-col soft wrap, allow `<details>`).
 - **`lychee`** for external link checks.
 - **A JSON-parse snippet check** that extracts every fenced ` ```jsonc ` block, strips `//` comments, and asserts the result is valid.
-- **A preset-table cross-check** that reads `oh-my-opencode-slim.json` and asserts the preset tables match the JSON. _(If this check is currently green despite the `observer`/`council`/librarian-duplicate discrepancies caught above, it's worth confirming the check actually diffs agent-by-agent rather than just counting rows.)_
+- **A preset-table cross-check** that reads `oh-my-opencode-slim.json` and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows.
 
 ## Related
 
