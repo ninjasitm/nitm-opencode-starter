@@ -1286,10 +1286,6 @@
 			"feature-builder": {
 				"model": [
 					{
-						"id": "opencode/claude-sonnet-5",
-						"variant": "low"
-					},
-					{
 						"id": "opencode/deepseek-v4-flash-free",
 						"variant": "high"
 					},
@@ -1425,10 +1421,6 @@
 			},
 			"reviewer": {
 				"model": [
-					{
-						"id": "opencode/claude-sonnet-5",
-						"variant": "high"
-					},
 					{
 						"id": "opencode-go/deepseek-v4-pro",
 						"variant": "max"
