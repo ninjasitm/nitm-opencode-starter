@@ -6,11 +6,13 @@ This is an opinionated starter, not a general guide. It ships a working OpenCode
 
 Five minutes to your first session, with OpenCode Go as the default model provider:
 
-- **Install OpenCode**: macOS/Linux: `curl -fsSL https://opencode.ai/install | bash`. Windows: WSL is recommended; native scoop/choco/npm also work.
-- **Install the two plugins**: `bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`. Install `bun` first with `npm i -g bun` if you don't have it.
-- **Subscribe to OpenCode Go**: $5 first month, then $10/month. Sign up at [opencode.ai/go](https://opencode.ai/go) and grab your API key.
-- **Connect in the TUI**: `opencode`, then `/connect`, pick "OpenCode", paste your key. (Stored at `~/.local/share/opencode/auth.json`: never commit it.)
-- **Run from a project dir**: `cd` to your project, then `opencode`. The `default` preset routes most agents to `opencode-go/*` models, with broader Zen models as fallbacks.
+> **Prerequisite — set up the prompt-and-rules half first**: install the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) in your project before continuing. It provides `.opencode/agents/*.md` thin wrappers with real OpenCode model IDs and full prompt bodies (via `@.claude/agents-snippets/<name>.md`) for the 14 custom agents in this starter. OpenCode auto-discovers those agents and their `.md` definitions win for model + prompt body; the `oh-my-opencode-slim.jsonc` `orchestratorPrompt` routing hints still layer on top. **Without the toolkit, the 14 custom agents only get the one-liner descriptions from `oh-my-opencode-slim.jsonc` — no full prompt bodies.** This is a deliberate design choice, not an oversight: the toolkit is the source of truth for the custom-agent prompts, and this starter is the runtime half of the stack.
+
+- [ ] **Install OpenCode**: macOS/Linux: `curl -fsSL https://opencode.ai/install | bash`. Windows: WSL is recommended; native scoop/choco/npm also work.
+- [ ] **Install the two plugins**: `bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`. Install `bun` first with `npm i -g bun` if you don't have it.
+- [ ] **Subscribe to OpenCode Go**: $5 first month, then $10/month. Sign up at [opencode.ai/go](https://opencode.ai/go) and grab your API key.
+- [ ] **Connect in the TUI**: `opencode`, then `/connect`, pick "OpenCode", paste your key. (Stored at `~/.local/share/opencode/auth.json`: never commit it.)
+- [ ] **Run from a project dir**: `cd` to your project, then `opencode`. The `default` preset routes most agents to `opencode-go/*` models, with broader Zen models as fallbacks. The 14 custom agents now have full prompt bodies from `.opencode/agents/*.md` (the toolkit you installed in the prerequisite).
 
 That's the whole path. The callout below is a heads-up for reading the rest; the section after that explains why this starter is opinionated.
 
@@ -24,7 +26,7 @@ That's the whole path. The callout below is a heads-up for reading the rest; the
 2. **Fallback: OpenCode models.** When Go is unavailable (rate limit, billing paused, model down), the agents fall through to the broader OpenCode model family: Zen pay-as-you-go and the free models on it.
 3. You may switch to `balanced` (mid-cost Go-leaning mix), `high-cost` (frontier-only), or `low-cost` (free-only) presets as your workload changes. Switching requires restarting Opencode (see the `/preset` bug note below).
 
-The `default` preset in `oh-my-opencode-slim.json` is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
+The `default` preset in `oh-my-opencode-slim.jsonc` is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
 
 If you'd rather not subscribe to Go, the starter still works with Zen or BYO providers: the table below spells out the trade-offs. The opinionated defaults here are tuned for Go; the other paths get the same agent fleet with different billing.
 
@@ -88,7 +90,9 @@ For OpenCode Go: sign in at [opencode.ai](https://opencode.ai), subscribe to Go,
 
 ## Where your config lives
 
-OpenCode looks for config in many places; the project file walks up to the nearest `.git`. For this starter, the two files that matter are the project-root `opencode.jsonc` and `oh-my-opencode-slim.json`.
+OpenCode looks for config in many places; the project file walks up to the nearest `.git`. For this starter, the two files that matter are the project-root `opencode.jsonc` and `oh-my-opencode-slim.jsonc`.
+
+OpenCode also auto-discovers agent definitions from any `.opencode/agent/*.md` or `.opencode/agents/*.md` file under a `.opencode/` directory in the project tree. The [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) (see the Quick setup prerequisite) ships 14 such files — one per custom agent in this starter — and those `.md` definitions win for prompt body, model, mode, and permission. See [Meet the agent fleet](#meet-the-agent-fleet) for the merge order.
 
 | OS      | Global config                                                                     | Auth                                            | Project file      |
 | ------- | --------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------- |
@@ -124,7 +128,7 @@ The repo ships two config files. You don't have to read the full versions: these
 
 This disables OpenCode's built-in `build` and `general` agents so they don't fight with the slim fleet.
 
-### `oh-my-opencode-slim.json`
+### `oh-my-opencode-slim.jsonc`
 
 ```jsonc
 {
@@ -177,12 +181,12 @@ The `fallback` block is what slim uses when an agent has no model list of its ow
 
 ### Reference: full config
 
-The full `opencode.jsonc` is 19 lines; the full `oh-my-opencode-slim.json` is ~1,500 lines (it consolidates all four presets and all 22 agents in one file). Both are tracked in this repo and are the source of truth:
+The full `opencode.jsonc` is 19 lines; the full `oh-my-opencode-slim.jsonc` is ~1,500 lines (it consolidates all four presets and all 22 agents in one file). Both are tracked in this repo and are the source of truth:
 
 - `opencode.jsonc`: the complete project config.
-- `oh-my-opencode-slim.json`: the complete agent roster, all four presets, and the fallback block.
+- `oh-my-opencode-slim.jsonc`: the complete agent roster, all four presets, and the fallback block.
 
-Don't paste the full files into your project if you're starting from scratch; just point your `opencode.jsonc` at the same plugins and copy `oh-my-opencode-slim.json` verbatim. If you change either, the README's tables need a re-check (see Validating).
+Don't paste the full files into your project if you're starting from scratch; just point your `opencode.jsonc` at the same plugins and copy `oh-my-opencode-slim.jsonc` verbatim. If you change either, the README's tables need a re-check (see Validating).
 
 ## Switch presets
 
@@ -221,7 +225,14 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 
 ## Meet the agent fleet
 
-This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrator / oracle / designer / fixer / explorer / librarian / council / observer backbone that the plugin provides) plus **14 custom agents** that are the project's specialization layer. The 14 custom agent names and roles are fixed across presets; only their model assignments change. The 8 built-in agents also vary by preset (`default` ships 6, `high-cost` adds `observer`, `low-cost` adds `council` and pins the others to single free models). The per-preset tables below show the exact roster and the default-preset model assignments; the other three presets are in the tracked `oh-my-opencode-slim.json` under `presets.<name>.<agent>`.
+This repo ships **22 agents per preset**: **8 built-in agents** (the orchestrator / oracle / designer / fixer / explorer / librarian / council / observer backbone that the plugin provides) plus **14 custom agents** that are the project's specialization layer. The 14 custom agent names and roles are fixed across presets; only their model assignments change. The 8 built-in agents also vary by preset (`default` ships 6, `high-cost` adds `observer`, `low-cost` adds `council` and pins the others to single free models). The per-preset tables below show the exact roster and the default-preset model assignments; the other three presets are in the tracked `oh-my-opencode-slim.jsonc` under `presets.<name>.<agent>`.
+
+> **Two sources for the 14 custom agents — which one wins?** The 14 custom agents in this starter are defined in two places, and OpenCode merges them. Order of precedence (highest first):
+>
+> 1. **`.opencode/agents/<name>.md`** — auto-discovered by OpenCode (`{agent,agents}/**/*.md` glob). Per the Quick setup prerequisite, the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) is installed in your project, so this is where the agents actually live: real OpenCode model IDs, `mode`, `temperature`, `permission`, and a full prompt body via the `@.claude/agents-snippets/<name>.md` reference.
+> 2. **`oh-my-opencode-slim.jsonc` `agents.<name>.orchestratorPrompt` + `presets.<name>.<agent>.model`** — what OMO slim contributes. The `orchestratorPrompt` (routing hint) is layered on top regardless. The `model` array is **overridden** by the `.md` file's `model` field due to OMO slim's `config()` hook doing `{ ...pluginAgent, ...existing }` (existing wins).
+>
+> **Practical consequence**: the 14 custom agents use the `.md`'s static model regardless of which preset is active. The 4 presets then only meaningfully differ for the 8 built-in agents (orchestrator, oracle, council, designer, fixer, explorer, librarian, observer). The `oh-my-opencode-slim.jsonc` model arrays for the 14 custom agents still serve as a fallback for the rare case where the toolkit isn't installed.
 
 ### The preset agents (roster and assignments vary by preset)
 
@@ -264,11 +275,11 @@ Every preset agent in `low-cost` is pinned to a single model, at zero marginal c
 | `oracle`, `council`, `fixer`, `observer` | `opencode/mimo-v2.5-free`         | `fixer` and `observer` run at variant `max` |
 | `explorer`, `librarian`                  | `opencode/deepseek-v4-flash-free` | variant `high`                              |
 
-`council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and isn't documented elsewhere in this README beyond this table. If you're relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked `oh-my-opencode-slim.json` rather than assuming parity with `oracle`.
+`council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and isn't documented elsewhere in this README beyond this table. If you're relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked `oh-my-opencode-slim.jsonc` rather than assuming parity with `oracle`.
 
 ### The 14 custom agents (names + roles are fixed; model assignments vary by preset)
 
-Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked `oh-my-opencode-slim.json`. The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries.
+Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked `oh-my-opencode-slim.jsonc`. The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each agent come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
 
 #### Codegen
 
@@ -359,7 +370,7 @@ For ongoing maintenance, this README is checked by:
 - **`markdownlint`** with a custom config (100-col soft wrap, allow `<details>`).
 - **`lychee`** for external link checks.
 - **A JSON-parse snippet check** that extracts every fenced ` ```jsonc ` block, strips `//` comments, and asserts the result is valid.
-- **A preset-table cross-check** that reads `oh-my-opencode-slim.json` and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows.
+- **A preset-table cross-check** that reads `oh-my-opencode-slim.jsonc` and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows. **Also cross-check against `.opencode/agents/*.md`** when present in the same repo (i.e. if the NITM AI-Assisted Development Toolkit is vendored here): the 14 custom agents' `name`, `model`, `mode`, and `permission` keys should be consistent across both sources — `oh-my-opencode-slim.jsonc` is the fallback when `.opencode/agents/` is absent.
 
 ## Related
 
@@ -373,4 +384,4 @@ For ongoing maintenance, this README is checked by:
 - [ponytail on GitHub](https://github.com/DietrichGebert/ponytail)
 - **[NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)**: Cursor rules, GitHub Copilot instructions, `AGENTS.md` templates, and bundled skills (TDD, debugging, etc.). Use it for the prompt-and-rules half of the stack; this repo is the OpenCode-runtime half.
 - `opencode.jsonc` (in this repo): full project config
-- `oh-my-opencode-slim.json` (in this repo): full preset + agent config
+- `oh-my-opencode-slim.jsonc` (in this repo): full preset + agent config
