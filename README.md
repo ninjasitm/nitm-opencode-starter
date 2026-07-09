@@ -12,7 +12,7 @@ Five minutes to your first session, with OpenCode Go as the default model provid
 - [ ] **Install the two plugins**: `bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`. Install `bun` first with `npm i -g bun` if you don't have it.
 - [ ] **Copy the two config files** ([opencode.jsonc](./opencode.jsonc) and [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc)) into the root of your project. They are the source of truth for plugins, presets, and the 14 custom agent prompts. Skip this step if you are starting from this starter (the files are already there).
 - [ ] **Subscribe to OpenCode Go**: $5 first month, then $10/month. Sign up at [opencode.ai/go?ref=8N581SYDM0](https://opencode.ai/go?ref=8N581SYDM0) and grab your API key.
-- [ ] **Connect in the TUI**: `opencode`, then `/connect`, pick "OpenCode", paste your key. (Stored at `~/.local/share/opencode/auth.json`: never commit it.)
+- [ ] **Connect in the TUI**: `opencode`, then `/connect`, pick "OpenCode Go", paste your key. (Stored at `~/.local/share/opencode/auth.json`: never commit it.). You will also want to enabled `/connect` "OpenCode Zen" as well
 - [ ] **Run from a project dir**: `cd` to your project, then `opencode`. The `default` preset routes most agents to `opencode-go/*` models, with broader Zen models as fallbacks.
 
 # Full Guide
@@ -85,6 +85,15 @@ opencode
 
 For OpenCode Go: sign in at [opencode.ai](https://opencode.ai), subscribe to Go at [opencode.ai/go?ref=8N581SYDM0](https://opencode.ai/go?ref=8N581SYDM0), then `/connect` and pick "OpenCode". Your key is stored at `~/.local/share/opencode/auth.json`: never paste it into a chat or commit it.
 
+### Configure your account
+
+After subscribing to Go, configure your OpenCode account at [opencode.ai](https://opencode.ai) to avoid surprise charges:
+
+1. **Use available balance**: in the Go config, enable "Use your available balance after reaching the usage limits". This lets you continue using Go models when you hit the rolling limits, drawing from your account balance instead of failing.
+2. **Enable Billing**: in your OpenCode account Billing settings, turn on Billing. This is required for pay-as-you-go usage beyond the Go subscription.
+3. **Auto Reload**: in Billing settings, enable Auto Reload so your balance tops up automatically when it runs low.
+4. **Monthly Limit**: in Billing settings, set a Monthly Limit to cap your maximum spend. This is the hard stop that prevents runaway costs. Recommended $40 to start which brings you to $50 total with the Go subscription.
+
 ## Where your config lives
 
 OpenCode looks for config in many places; the project file walks up to the nearest `.git`. For this starter, the two files that matter are the project-root [opencode.jsonc](./opencode.jsonc) and [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc).
@@ -101,7 +110,7 @@ If you are inside a project with an `opencode.json` / `opencode.jsonc`, that tak
 
 ## Minimal config files
 
-The repo ships two config files. You do not have to read the full versions: these minimal snippets are enough to start. If you are using this starter as a template, the full files ([opencode.jsonc](./opencode.jsonc) is 19 lines, [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is ~1,500 lines) are the source of truth and can be copied verbatim into your project root.
+The repo ships two config files. If you are using this starter as a template, the full files are the source of truth and can be copied verbatim into your project root.
 
 ### `opencode.jsonc`
 
@@ -127,60 +136,9 @@ This disables OpenCode's built-in `build` and `general` agents so they do not fi
 
 ### `oh-my-opencode-slim.jsonc`
 
-```jsonc
-{
-	"$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
-	"preset": "default",
-	"presets": {
-		"default": {
-			"orchestrator": {
-				"model": [
-					"opencode-go/minimax-m3",
-					"opencode/deepseek-v4-pro",
-					"opencode/mimo-v2.5-pro",
-				],
-			},
-			"fixer": {
-				"model": [
-					{ "model": "opencode/deepseek-v4-flash-free" },
-					{ "model": "opencode-go/deepseek-v4-pro" },
-					{ "model": "opencode/qwen3.7-plus", "reasoningEffort": "max" },
-				],
-			},
-			// 6 more built-in agents (oracle, designer, explorer, librarian, council, observer).
-			// 14 custom agents (admin-portal, api-specialist, backend-architect,
-			// frontend-developer, implementer, green, red, refactor, feature-builder,
-			// tdd, planner, reviewer, researcher, documenter) with their own model arrays:
-			// see the tracked file. The "balanced", "high-cost", and "low-cost" presets
-			// follow the same shape with different model assignments per agent.
-		},
-		"balanced": {
-			/* same agent roster, mid-cost model assignments */
-		},
-		"high-cost": {
-			/* same agent roster, frontier-only model assignments */
-		},
-		"low-cost": {
-			/* same agent roster, free-only model assignments */
-		},
-	},
-	"agents": {
-		"admin-portal": {
-			"orchestratorPrompt": "Build administrator portals with RBAC, system dashboards, reporting, analytics, and operational tooling. Specializes in admin frameworks and monitoring ecosystem tools.",
-		},
-		"api-specialist": {
-			"orchestratorPrompt": "Design and implement API architecture, documentation, and developer experience. Use for REST design, GraphQL, OpenAPI specs, SDK generation, API versioning, and integration patterns.",
-		},
-		// 12 more custom agents, each with an orchestratorPrompt sourced from
-		// ninjasitm/ai-assisted-dev-toolkit's src/repo/.claude/agents/<name>.agent.md.
-		// The prompt is what the orchestrator reads to know when/how to delegate
-		// to this agent; the model assignment lives in presets.<name>.<agent>, not here.
-	},
-	"fallback": { "enabled": true, "timeoutMs": 15000 },
-}
-```
+See [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) for the full contents: all four presets (`default`, `balanced`, `high-cost`, `low-cost`) with every agent's model array, temperature, and variant settings. The file is self-contained; copy it into your project root.
 
-> **Note on `reasoningEffort`**: set it per-model inside the model array (as above), not at the agent level. Setting it on the agent applies it to every model in the fallback chain, including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain. Confirm this object-array shape against the current schema version before relying on it; if unsupported, split the agent into two rather than over-applying effort to the whole chain.
+> **Note on `reasoningEffort`**: set it per-model inside the model array, not at the agent level. Setting it on the agent applies it to every model in the fallback chain, including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain.
 
 The `fallback` block is what slim uses when an agent has no model list of its own. 15 seconds is the timeout before it gives up and asks the user.
 
