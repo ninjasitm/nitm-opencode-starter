@@ -11,11 +11,11 @@
 						"variant": "high"
 					},
 					{
-						"id": "opencode-go/deepseek-v4-pro",
+						"id": "opencode-go/mimo-v2.5-pro",
 						"variant": "max"
 					},
 					{
-						"id": "opencode-go/mimo-v2.5-pro",
+						"id": "opencode-go/deepseek-v4-pro",
 						"variant": "max"
 					}
 				],
@@ -75,15 +75,15 @@
 			"explorer": {
 				"model": [
 					{
+						"id": "opencode-go/mimo-v2.5-pro",
+						"variant": "high"
+					},
+					{
 						"id": "opencode/mimo-v2.5-free",
 						"variant": "high"
 					},
 					{
 						"id": "opencode/deepseek-v4-flash-free",
-						"variant": "high"
-					},
-					{
-						"id": "opencode-go/deepseek-v4-flash",
 						"variant": "high"
 					}
 				],
@@ -129,15 +129,15 @@
 			"observer": {
 				"model": [
 					{
+						"id": "opencode-go/minimax-m3",
+						"variant": "high"
+					},
+					{
 						"id": "opencode/mimo-v2.5-free",
 						"variant": "high"
 					},
 					{
 						"id": "opencode/deepseek-v4-flash-free",
-						"variant": "high"
-					},
-					{
-						"id": "opencode-go/minimax-m3",
 						"variant": "high"
 					}
 				],
@@ -247,7 +247,7 @@
 			"green": {
 				"model": [
 					{
-						"id": "opencode-go/deepseek-v4-flash-free",
+						"id": "opencode/deepseek-v4-flash-free",
 						"variant": "max"
 					},
 					{
@@ -281,7 +281,7 @@
 			"planner": {
 				"model": [
 					{
-						"id": "opencode-go/mimo-v2-5-pro",
+						"id": "opencode-go/mimo-v2.5-pro",
 						"variant": "max"
 					},
 					{
@@ -1154,8 +1154,12 @@
 			"oracle": {
 				"model": [
 					{
-						"id": "opencode/mimo-v2.5-free",
+						"id": "opencode/hy3-free",
 						"variant": "max"
+					},
+					{
+						"id": "opencode/mimo-v2.5-free",
+						"variant": "high"
 					}
 				],
 				"temperature": 0.1
@@ -1499,5 +1503,10 @@
 	"fallback": {
 		"enabled": true,
 		"timeoutMs": 15000
+	},
+	"multiplexer": {
+		"type": "auto",
+		"layout": "main-horizontal",
+		"main_pane_size": 60
 	}
 }
