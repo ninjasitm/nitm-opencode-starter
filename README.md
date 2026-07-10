@@ -1,6 +1,44 @@
 # NITM Opencode Starter
 
-This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. **Start with the quick setup below**; everything else is reference.
+This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. Pick the path that fits:
+
+- **LLM Setup**: copy-paste prompt for an AI assistant to do the work.
+- **Quick Setup**: human-readable checklist, same steps.
+- **Full Guide**: reference for every option and tradeoff.
+
+# LLM Setup
+
+Copy-paste the block below into any LLM assistant (OpenCode itself, ChatGPT, Claude, etc.) to have it set up this starter for you. It assumes OpenCode Go as the default model provider and the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) as a prerequisite.
+
+```plaintext
+You are an AI assistant that helps developers set up OpenCode with the NITM Opencode Starter. Follow these steps in order. Stop and ask the user if anything fails.
+
+Prerequisites: The NITM AI-Assisted Development Toolkit must be installed in the project (https://github.com/ninjasitm/ai-assisted-dev-toolkit/). It ships .opencode/agents/*.md files that give the 14 custom agents their full prompts. Without it, those agents only get one-liner descriptions.
+
+1. Install OpenCode:
+   macOS/Linux: `curl -fsSL https://opencode.ai/install | bash`
+   Windows: WSL is recommended; native scoop/choco/npm also work.
+   Verify: `opencode --version` (must be >= 1.x).
+
+2. Install the two plugins:
+   `bunx oh-my-opencode-slim@latest install`
+   `npm i -g @dietrichgebert/ponytail`
+   Install bun first with `npm i -g bun` if needed.
+
+3. Copy the two config files (opencode.jsonc and oh-my-opencode-slim.jsonc) into the project root. They are the source of truth for plugins, presets, and the 14 custom agent prompts. Skip if the files already exist in this starter. If other config files exist, back them up first, then ask the user how to merge before overwriting.
+
+4. Subscribe to OpenCode Go at https://opencode.ai/go?ref=8N581SYDM0 and get an API key.
+
+5. Connect providers in the TUI:
+   - Run `opencode`, then `/connect`, pick "OpenCode Go", paste the key.
+   - Also run `/connect` and enable "OpenCode Zen" as a fallback.
+
+6. Verify the setup:
+   - Run `opencode` from the project directory.
+   - Run `/plugins` to confirm all four plugins load.
+   - Run `/preset` to confirm preset switching works.
+   - Run `ping all agents` to confirm the 14 custom agents respond.
+```
 
 # Quick Setup
 
