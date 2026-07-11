@@ -15,6 +15,13 @@
     "oh-my-opencode-slim.jsonc",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninjasitm/nitm-opencode-starter.git"
+  },
+  "author": "Ninjas In The Machine <malcolm@ninjasitm.com>",
+  "keywords": ["opencode", "ai", "starter", "cli", "ponytail", "agent"],
+  "homepage": "https://github.com/ninjasitm/nitm-opencode-starter#readme",
   "scripts": {
     "test": "node --test"
   },
