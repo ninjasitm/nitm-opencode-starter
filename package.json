@@ -1,6 +1,6 @@
 {
   "name": "nitm-opencode-starter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bootstrap, patch, upgrade, and doctor an OpenCode setup with the NITM Opencode Starter config.",
   "repository": {
     "type": "git",
@@ -15,12 +15,15 @@
     "oh-my-opencode-slim.jsonc",
     "README.md"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ninjasitm/nitm-opencode-starter.git"
-  },
   "author": "Ninjas In The Machine <malcolm@ninjasitm.com>",
-  "keywords": ["opencode", "ai", "starter", "cli", "ponytail", "agent"],
+  "keywords": [
+    "opencode",
+    "ai",
+    "starter",
+    "cli",
+    "ponytail",
+    "agent"
+  ],
   "homepage": "https://github.com/ninjasitm/nitm-opencode-starter#readme",
   "scripts": {
     "test": "node --test"
