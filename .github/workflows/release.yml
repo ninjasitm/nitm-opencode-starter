@@ -31,12 +31,11 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      # If `main` is branch-protected, create a repo secret `RELEASE_TOKEN`
-      # containing a PAT with `repo` scope; the default GITHUB_TOKEN push is blocked.
+      # Uses the default GITHUB_TOKEN (this job has contents: write); main is not
+      # branch-protected, so no custom PAT is required. Tags are plain semver (no "v" prefix).
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.RELEASE_TOKEN }}
-          persist-credentials: false
+          persist-credentials: true
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -47,7 +46,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           NEW_VERSION=$(node -e "const fs=require('fs');const p='package.json';const j=JSON.parse(fs.readFileSync(p));const v=j.version.split('.');v[2]=+v[2]+1;j.version=v.join('.');fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');console.log(j.version)")
           git add package.json
-          git commit -m "chore: release v${NEW_VERSION} [skip ci]"
-          git tag "v${NEW_VERSION}"
+          git commit -m "chore: release ${NEW_VERSION} [skip ci]"
+          git tag "${NEW_VERSION}"
           git push origin main
           git push origin "v${NEW_VERSION}"

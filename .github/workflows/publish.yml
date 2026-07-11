@@ -3,7 +3,7 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*'
+      - '[0-9]*'
 
 permissions:
   contents: read
@@ -33,7 +33,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Verify tag matches package version
         run: |
-          node -e "const v=require('./package.json').version; const tag=process.env.GITHUB_REF_NAME; if(tag!=='v'+v){console.error('Tag '+tag+' does not match package version v'+v); process.exit(1);} console.log('Tag '+tag+' matches package v'+v);"
+          node -e "const v=require('./package.json').version; const tag=process.env.GITHUB_REF_NAME; if(tag!==v){console.error('Tag '+tag+' does not match package version '+v); process.exit(1);} console.log('Tag '+tag+' matches package v'+v);"
       - run: npm publish
         env:
           # NPM_TOKEN must be an npm Automation token (bypasses 2FA); a regular
