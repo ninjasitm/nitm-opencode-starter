@@ -24,7 +24,7 @@ benchmarks and README.
 Render plain ASCII bars. The bar length shows the measured range; the label
 carries the exact figure:
 
-```
+```text
   ponytail gain                     benchmark median · 5 tasks · 3 models
 
   Lines of code   no-skill  ████████████████████  100%

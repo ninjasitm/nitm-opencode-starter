@@ -1,6 +1,6 @@
 ---
 description: Conduct comprehensive pull request code review
-allowed-tools: "Read, Grep"
+allowed-tools: "Read, Grep, Bash"
 argument-hint: "PR number or branch"
 ---
 

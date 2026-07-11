@@ -1,26 +1,25 @@
 # Workflow rules
 
-## Editing templates
+## Editing rules or snippets
 
-1. Navigate to `src/repo/` or `src/monorepo/`.
-2. Edit template files while preserving `{{PLACEHOLDER}}` syntax.
-3. Test by copying to a real project and replacing placeholders.
+1. Edit the source of truth in `.claude/rules-snippets/` (or `.claude/prompt-snippets/`).
+2. Verify every thin wrapper that references the snippet still resolves.
+3. Run `node --test` to catch regressions.
 
-## Adding new templates
+## Adding a skill
 
-1. Create the file in the appropriate `src/` subdirectory.
-2. Use `{{PLACEHOLDER}}` for all project-specific values.
-3. Document new placeholders in the root README.md.
+1. Create a new directory under `.agents/skills/<skill-name>/`.
+2. Add a `SKILL.md` frontmatter file with `name`, `description`, and body.
+3. If the skill needs a thin wrapper in `.claude/rules/` or `.opencode/rules/`, add one.
 
-## Testing templates
+## Adding a command
 
-1. Copy template files to a test project.
-2. Use find-and-replace to substitute placeholders.
-3. Verify the resulting configuration works correctly.
+1. Create a `.md` file in `.opencode/commands/` (OpenCode) or `.claude/commands/` (Claude Code).
+2. Include YAML frontmatter with `description`.
+3. Keep the body concise; link to shared snippets for reusable content.
 
-## Placeholder conventions
+## Editing the CLI
 
-- `{{PROJECT_NAME}}` - Project name (kebab-case).
-- `{{FRAMEWORK}}` - Primary framework.
-- `{{PACKAGE_MANAGER}}` - npm, pnpm, yarn, or bun.
-- `{{DEV_PORT}}` - Development server port.
+1. `bin/cli.js` is the sole CLI entry point.
+2. Run `node --test` (or `node test/cli.test.js`) to verify.
+3. Keep the CLI self-contained; avoid adding runtime dependencies unless necessary.

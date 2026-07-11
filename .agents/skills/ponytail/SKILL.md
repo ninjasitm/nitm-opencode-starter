@@ -10,7 +10,7 @@ description: >
   "minimal solution", "yagni", "do less", or "shortest path", and whenever
   they complain about over-engineering, bloat, boilerplate, or unnecessary
   dependencies.
-argument-hint: "[lite|full|ultra]"
+argument-hint: "[off|lite|full|ultra]"
 license: MIT
 ---
 
@@ -24,7 +24,7 @@ code is the code never written.
 
 ACTIVE EVERY RESPONSE. No drift back to over-building. Still active if
 unsure. Off only: "stop ponytail" / "normal mode". Default: **full**.
-Switch: `/ponytail lite|full|ultra`.
+Switch: `/ponytail off|lite|full|ultra`.
 
 ## The ladder
 
@@ -65,6 +65,7 @@ Pattern: `[code] → skipped: [X], add when [Y].`
 
 | Level | What change |
 |-------|------------|
+| **off** | Ponytail disabled. "stop ponytail" / "normal mode" also revert. |
 | **lite** | Build what's asked, but name the lazier alternative in one line. User picks. |
 | **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
 | **ultra** | YAGNI extremist. Deletion before addition. Ship the one-liner and challenge the rest of the requirement in the same breath. |

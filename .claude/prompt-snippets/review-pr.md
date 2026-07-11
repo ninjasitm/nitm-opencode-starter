@@ -37,16 +37,18 @@ Conduct comprehensive code review for pull requests with structured fix tracking
         - Fetch **top-level PR comments** (issue-level comments on the PR conversation)
         - Fetch **inline review comments** (comments on specific lines of code)
         - Fetch **pending review comments** (from in-progress reviews)
-     2. **If MCP tools fail or return no comments**, fall back to `gh` CLI:
-        ```bash
-        # Top-level conversation comments (often missed!)
-        gh api repos/{owner}/{repo}/issues/{pr_number}/comments
-        # Review comments (inline on code)
-        gh api repos/{owner}/{repo}/pulls/{pr_number}/comments
-        # Reviews themselves (contain top-level review bodies)
-        gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews
-        ```
-     3. **Always check BOTH** top-level issue comments AND inline review comments — agents commonly miss top-level comments by only checking review comments
+      2. **If MCP tools fail or return no comments**, fall back to `gh` CLI:
+
+         ```bash
+         # Top-level conversation comments (often missed!)
+         gh api repos/{owner}/{repo}/issues/{pr_number}/comments
+         # Review comments (inline on code)
+         gh api repos/{owner}/{repo}/pulls/{pr_number}/comments
+         # Reviews themselves (contain top-level review bodies)
+         gh api repos/{owner}/{repo}/pulls/{pr_number}/reviews
+         ```
+
+      3. **Always check BOTH** top-level issue comments AND inline review comments — agents commonly miss top-level comments by only checking review comments
    - Identify which comments are **unresolved/open** vs already resolved
 
 2. **Review PR Comments from ALL Reviewers**:

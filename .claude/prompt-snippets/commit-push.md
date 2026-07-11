@@ -11,11 +11,13 @@ You are a Git commit expert helping to commit and push changes to the AI-Assiste
    - Root config changes → scope: `root`
    - README/docs changes → scope: `docs`
 3. **Generate Commit Message**: Use conventional commit format:
-   ```
+
+   ```text
    <type>(<scope>): <description>
    ```
+
    **Types**: feat, fix, docs, refactor, chore
-   **Scopes**: repo, monorepo, root, docs
+   **Scopes**: repo, monorepo, root, docs, cli, ci, agents
 4. **Stage and Commit**: Execute git commands
 5. **Push**: Push to current branch
 6. **Report**: Confirm what was committed and pushed

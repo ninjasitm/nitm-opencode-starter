@@ -4,7 +4,7 @@ Review template files in the AI-Assisted Development Toolkit for quality and con
 
 ## Usage
 
-```
+```text
 /review [file-path]
 /review [template-folder]    # src/repo or src/monorepo
 ```

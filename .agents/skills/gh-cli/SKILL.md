@@ -267,18 +267,20 @@ Manage PR review comments and resolve threads.
 ### List Review Threads
 
 ```bash
-# List unresolved review threads via GraphQL
+# List unresolved review threads via GraphQL (first page)
 gh api graphql -f query='
 {
   repository(owner: "OWNER", name: "REPO") {
     pullRequest(number: 123) {
       reviewThreads(first: 50) {
+        pageInfo { hasNextPage endCursor }
         nodes {
           id
           isResolved
           comments(first: 1) {
             nodes {
               id
+              databaseId
               body
               path
               line
@@ -291,14 +293,18 @@ gh api graphql -f query='
 }'
 
 # Filter to unresolved only with jq
-gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {id, file: .comments.nodes[0].path, body: .comments.nodes[0].body}'
+gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {id, databaseId: .comments.nodes[0].databaseId, file: .comments.nodes[0].path, body: .comments.nodes[0].body}'
+
+# If pageInfo.hasNextPage is true, paginate by passing endCursor as $cursor
+# and adding `after: $cursor` to the reviewThreads argument, repeating until
+# hasNextPage is false.
 ```
 
 ### Reply to a Review Comment
 
 ```bash
-# Reply to a specific comment thread (REST API — requires PR number)
-gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies -X POST -f body="Fixed in commit abc123."
+# Reply to a specific comment thread (REST API — requires integer databaseId, not GraphQL node ID)
+gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_DATABASE_ID/replies -X POST -f body="Fixed in commit abc123."
 ```
 
 ### Resolve a Review Thread
@@ -358,17 +364,29 @@ gh api graphql -f query='{
   repository(owner: "OWNER", name: "REPO") {
     pullRequest(number: 123) {
       reviewThreads(first: 50) {
-        nodes { id isResolved comments(first: 1) { nodes { body path } } }
+        pageInfo { hasNextPage endCursor }
+        nodes {
+          id
+          isResolved
+          comments(first: 1) {
+            nodes {
+              id
+              databaseId
+              body
+              path
+            }
+          }
+        }
       }
     }
   }
-}' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {thread_id: .id, file: .comments.nodes[0].path}'
+}' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {thread_id: .id, databaseId: .comments.nodes[0].databaseId, file: .comments.nodes[0].path}'
 
 # 2. Make fixes, commit, push
 git add -A && git commit -m "fix: address review comments" && git push
 
-# 3. Reply to each comment
-gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies -X POST -f body="Fixed in commit abc123."
+# 3. Reply to each comment (REST — needs integer databaseId)
+gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_DATABASE_ID/replies -X POST -f body="Fixed in commit abc123."
 
 # 4. Resolve each thread
 gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "THREAD_ID"}) { thread { id isResolved } } }'
@@ -383,11 +401,12 @@ gh api repos/OWNER/REPO/pulls/123/reviews -X POST \
 
 ### Permission Errors (FORBIDDEN)
 
-**Symptom:** `malcolm-napx does not have the correct permissions to execute ResolveReviewThread`
+**Symptom:** `<GITHUB_USERNAME> does not have the correct permissions to execute ResolveReviewThread`
 
 **Cause:** Multiple GitHub accounts configured; the active account lacks write access.
 
 **Diagnosis:**
+
 ```bash
 # Check which accounts are configured
 gh auth status
@@ -397,18 +416,20 @@ gh auth status 2>&1 | grep -A2 "Active account: true"
 ```
 
 **Fix — switch to the correct account:**
+
 ```bash
 # Switch active account
 gh auth switch
 
 # Or set the active account explicitly
-gh auth switch -u ninjasitm
+gh auth switch -u <GITHUB_USERNAME>
 
 # Verify the switch
 gh auth status
 ```
 
 **Fix — if the active account genuinely lacks permissions:**
+
 ```bash
 # Check repo access
 gh api repos/OWNER/REPO --jq '.permissions'
@@ -426,6 +447,7 @@ gh auth refresh -s repo,read:org
 **Cause:** Thread ID is invalid or already resolved.
 
 **Fix:**
+
 ```bash
 # Re-list threads to confirm IDs
 gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | {id, isResolved}'
@@ -439,12 +461,14 @@ echo "$THREAD_ID" | grep -q "^PRRT_" || echo "Invalid thread ID format"
 **Symptom:** `403 rate limit exceeded` or `429` errors during bulk thread resolution.
 
 **Fix:**
+
 ```bash
 # Check remaining rate limit
 gh api rate_limit --jq '.rate.remaining'
 
 # Add delays between batch operations
-for thread_id in $(thread_ids); do
+# ponytail: array literal, pipe from prior query if list is dynamic
+for thread_id in PRRT_xxx PRRT_yyy PRRT_zzz; do
   gh api graphql -f query="mutation { resolveReviewThread(input: {threadId: \"$thread_id\"}) { thread { id isResolved } } }"
   sleep 0.5  # 500ms between calls
 done
@@ -458,4 +482,4 @@ done
 - Sub-issues require GitHub's sub-issues feature (beta)
 - Epic patterns rely on label conventions, not native epics
 - PR thread resolution requires the GraphQL API (REST does not support it)
-- Thread node IDs start with `PRRT_`, comment IDs start with `PRRC_`
+- Thread node IDs start with `PRRT_` (GraphQL), comment node IDs start with `PRRC_` (GraphQL); REST endpoints use integer `databaseId`

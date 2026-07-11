@@ -1,6 +1,6 @@
 ---
 applyTo: "**/*"
-description: "Template development workflows for the AI-Assisted Development Toolkit."
+description: "Workflows for editing rules, skills, commands, and the CLI."
 ---
 
 # Workflows
@@ -8,6 +8,6 @@ description: "Template development workflows for the AI-Assisted Development Too
 Follow the workflows defined in [.claude/rules-snippets/workflows.md](../rules-snippets/workflows.md).
 
 Key workflows:
-- Edit templates in `src/repo/` or `src/monorepo/`.
-- Preserve `{{PLACEHOLDER}}` syntax.
-- Test by copying to a real project and replacing placeholders.
+- Edit snippet source in `.claude/rules-snippets/`, verify wrappers resolve.
+- Add skills under `.agents/skills/`, commands under `.opencode/commands/`.
+- Run `node --test` after changes to `bin/cli.js`.

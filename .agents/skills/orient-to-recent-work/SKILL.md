@@ -22,10 +22,10 @@ Before starting a non-trivial task, build a compact mental model of what has hap
 
 ## Protocol (do once per session, hold the result)
 
-1. **Read `CHANGELOG.md` [Unreleased]** — pending changes the team is preparing
-2. **Read the most recent released section of `CHANGELOG.md`** — what just shipped
-3. **Run `git log --oneline -20`** — recent commits at a glance
-4. **For commits that touch files you'll modify, run `git show <hash> --stat`** — scope only, not the full diff
+1. **Read `CHANGELOG.md` [Unreleased]** — pending changes the team is preparing. Skip if the file is missing; note "No CHANGELOG found."
+2. **Read the most recent released section of `CHANGELOG.md`** — what just shipped. Skip if absent.
+3. **Run `git log --oneline -20`** — recent commits at a glance. If git history is unavailable (e.g. not a git repo), note "No git history" and continue.
+4. **For commits that touch files you'll modify, run `git show <hash> --stat`** — scope only, not the full diff. Skip if step 3 was unavailable.
 5. **Hold this mental model in working memory** for the session; re-run only if task scope changes dramatically
 
 ## Output format

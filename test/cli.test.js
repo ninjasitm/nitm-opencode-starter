@@ -81,3 +81,41 @@ test("mergeConfigFiles backs up and merges, preserving customizations", () => {
   assert.ok(merged.plugin.includes("user-extra"));
   assert.ok(fs.existsSync("opencode.jsonc.bak"), "backup created");
 });
+
+test("stripJsonc does not corrupt string values containing ,} or ,]", () => {
+  const src = `{
+    "msg": "hello,}",
+    "msg2": "hello,]",
+    "arr": [1, 2,],
+    "obj": { "x": 1, }
+  }`;
+  const obj = cli.parseJsonc(src);
+  assert.strictEqual(obj.msg, "hello,}");
+  assert.strictEqual(obj.msg2, "hello,]");
+  assert.deepStrictEqual(obj.arr, [1, 2]);
+  assert.deepStrictEqual(obj.obj, { x: 1 });
+});
+
+test("collectDoctorChecks returns 5 well-formed checks", () => {
+  const checks = cli.collectDoctorChecks();
+  assert.ok(Array.isArray(checks));
+  assert.strictEqual(checks.length, 5);
+  for (const c of checks) {
+    assert.strictEqual(c.length, 3);
+    assert.strictEqual(typeof c[0], "string");
+    assert.strictEqual(typeof c[1], "boolean");
+  }
+});
+
+test("findPluginDir returns string or null without throwing", () => {
+  const r = cli.findPluginDir("this-plugin-does-not-exist-xyz");
+  assert.ok(r === null || typeof r === "string");
+});
+
+test("confirm refuses in non-TTY without --yes", async () => {
+  const orig = process.stdin.isTTY;
+  Object.defineProperty(process.stdin, "isTTY", { value: false, configurable: true });
+  const ok = await cli.confirm("Continue?", false);
+  assert.strictEqual(ok, false);
+  Object.defineProperty(process.stdin, "isTTY", { value: orig, configurable: true });
+});

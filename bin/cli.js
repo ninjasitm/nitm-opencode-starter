@@ -31,6 +31,7 @@ function fail(...a) {
 // --- JSONC handling (no deps) ---
 
 function stripJsonc(text) {
+  // Pass 1: drop comments (string-aware).
   let out = "";
   let i = 0;
   const n = text.length;
@@ -44,33 +45,42 @@ function stripJsonc(text) {
       while (i < n) {
         const ch = text[i];
         out += ch;
-        if (ch === "\\") {
-          out += text[i + 1];
-          i += 2;
-          continue;
-        }
-        if (ch === quote) {
-          i++;
-          break;
-        }
+        if (ch === "\\") { out += text[i + 1]; i += 2; continue; }
+        if (ch === quote) { i++; break; }
         i++;
       }
       continue;
     }
-    if (c === "/" && c2 === "/") {
-      while (i < n && text[i] !== "\n") i++;
-      continue;
-    }
-    if (c === "/" && c2 === "*") {
-      i += 2;
-      while (i < n && !(text[i] === "*" && text[i + 1] === "/")) i++;
-      i += 2;
-      continue;
-    }
+    if (c === "/" && c2 === "/") { while (i < n && text[i] !== "\n") i++; continue; }
+    if (c === "/" && c2 === "*") { i += 2; while (i < n && !(text[i] === "*" && text[i + 1] === "/")) i++; i += 2; continue; }
     out += c;
     i++;
   }
-  return out.replace(/,(\s*[}\]])/g, "$1");
+  // Pass 2: drop trailing commas, string-aware so values like ",]" are untouched.
+  let res = "";
+  let j = 0;
+  let inStr = false;
+  let q = "";
+  while (j < out.length) {
+    const ch = out[j];
+    if (inStr) {
+      res += ch;
+      if (ch === "\\") { res += out[j + 1]; j += 2; continue; }
+      if (ch === q) inStr = false;
+      j++;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") { inStr = true; q = ch; res += ch; j++; continue; }
+    if (ch === ",") {
+      let k = j + 1;
+      while (k < out.length && /\s/.test(out[k])) k++;
+      if (out[k] === "}" || out[k] === "]") { j = k; continue; }
+      res += ch; j++;
+      continue;
+    }
+    res += ch; j++;
+  }
+  return res;
 }
 
 function parseJsonc(text) {
@@ -110,7 +120,12 @@ function tryRun(cmd) {
 }
 
 function run(cmd) {
-  execSync(cmd, { stdio: "inherit" });
+  try {
+    execSync(cmd, { stdio: "inherit" });
+  } catch {
+    fail("Command failed:", cmd);
+    process.exit(1);
+  }
 }
 
 function ensureBun() {
@@ -196,27 +211,28 @@ function cmdPatch() {
 }
 
 function confirm(message, yes) {
-  if (yes) return true;
+  if (yes) return Promise.resolve(true);
   if (!process.stdin.isTTY) {
     warn("Non-interactive shell: refusing upgrade without --yes.");
-    return false;
+    return Promise.resolve(false);
   }
   process.stdout.write(message + " [y/N] ");
-  let ans = "";
-  try {
-    ans = fs.readFileSync(0, "utf8").trim().toLowerCase();
-  } catch {
-    return false;
-  }
-  return ans === "y" || ans === "yes";
+  return new Promise((resolve) => {
+    process.stdin.resume();
+    process.stdin.once("data", (data) => {
+      process.stdin.pause();
+      const ans = data.toString().trim().toLowerCase();
+      resolve(ans === "y" || ans === "yes");
+    });
+  });
 }
 
-function cmdUpgrade(yes) {
+async function cmdUpgrade(yes) {
   log("Upgrade will update your starter config to the latest version.");
   log("Versioned model assignments in opencode.jsonc / oh-my-opencode-slim.jsonc are overwritten with the latest starter values.");
   log("Your active `preset`, extra plugins, and any custom presets/agents you added are preserved.");
   log("A backup of each current config file is saved as <file>.bak before writing.");
-  if (!confirm("Continue with upgrade?", yes)) {
+  if (!(await confirm("Continue with upgrade?", yes))) {
     log("Aborted. No changes made.");
     return;
   }
@@ -257,31 +273,23 @@ function findPluginDir(name) {
   return null;
 }
 
-function cmdDoctor() {
-  const checks = [];
+function collectDoctorChecks() {
   const opencodeOk = tryRun("opencode --version");
-  checks.push(["OpenCode installed", opencodeOk, opencodeOk ? "" : "Install: curl -fsSL https://opencode.ai/install | bash"]);
-
   const bunOk = tryRun("bun --version");
-  checks.push(["bun installed", bunOk, bunOk ? "" : "Install: npm i -g bun"]);
-
   const ponyOk = tryRun("npm ls -g @dietrichgebert/ponytail --depth=0");
-  checks.push(["@dietrichgebert/ponytail installed (global)", ponyOk, ponyOk ? "" : "Install: npm i -g @dietrichgebert/ponytail"]);
-
   const pluginDir = findPluginDir("oh-my-opencode-slim");
-  checks.push([
-    "oh-my-opencode-slim plugin present (best-effort)",
-    !!pluginDir,
-    pluginDir ? "" : "Install: bunx oh-my-opencode-slim@latest install",
-  ]);
-
   const cfgOk = CONFIG_FILES.every((f) => fs.existsSync(path.join(process.cwd(), f)));
-  checks.push([
-    "Starter config files present in " + process.cwd(),
-    cfgOk,
-    cfgOk ? "" : "Run: npx nitm-opencode-starter install",
-  ]);
+  return [
+    ["OpenCode installed", opencodeOk, opencodeOk ? "" : "Install: curl -fsSL https://opencode.ai/install | bash"],
+    ["bun installed", bunOk, bunOk ? "" : "Install: npm i -g bun"],
+    ["@dietrichgebert/ponytail installed (global)", ponyOk, ponyOk ? "" : "Install: npm i -g @dietrichgebert/ponytail"],
+    ["oh-my-opencode-slim plugin present (best-effort)", !!pluginDir, pluginDir ? "" : "Install: bunx oh-my-opencode-slim@latest install"],
+    ["Starter config files present in " + process.cwd(), cfgOk, cfgOk ? "" : "Run: npx nitm-opencode-starter install"],
+  ];
+}
 
+function cmdDoctor() {
+  const checks = collectDoctorChecks();
   let failed = 0;
   console.log("\nDoctor checklist:\n");
   for (const [label, ok, fix] of checks) {
@@ -339,4 +347,4 @@ Usage:
 
 if (require.main === module) main();
 
-module.exports = { stripJsonc, parseJsonc, mergeConfig, mergeConfigFiles, copyMissing, copyForce, findPluginDir };
+module.exports = { stripJsonc, parseJsonc, mergeConfig, mergeConfigFiles, copyMissing, copyForce, findPluginDir, confirm, collectDoctorChecks };

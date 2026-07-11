@@ -1,51 +1,32 @@
 # Project context rules
 
-## Toolkit architecture
+## What this repo is
 
-This is a **template repository** for AI development instructions.
+`nitm-opencode-starter` is an **npm CLI + OpenCode starter config**. The CLI (`bin/cli.js`) bootstraps, patches, upgrades, and diagnoses an OpenCode installation. The repo also ships the OpenCode agent fleet configuration and ponytail skills.
 
 ## Purpose
 
-- Provide reusable AI instruction templates for Cursor IDE, GitHub Copilot, and Claude Code.
-- Support both single repositories and monorepos.
-- Use placeholder syntax `{{VAR}}` for project-specific customization.
+- Provide a one-command bootstrap (`npx nitm-opencode-starter`) for a curated OpenCode setup.
+- Ship the 4-preset agent fleet config (`oh-my-opencode-slim.jsonc`) and OpenCode project config (`opencode.jsonc`).
+- Bundle ponytail skills and a ponytail plugin under `.agents/skills/` and `.opencode/plugins/`.
 
-## Structure
+## Repo layout
 
-- `src/repo/` - Templates for single repository projects.
-- `src/monorepo/` - Templates for monorepo projects.
-- Root `.cursor/` and `.github/` - This toolkit's own configuration.
+- `bin/cli.js` — npm CLI entry point.
+- `package.json` — npm package metadata.
+- `opencode.jsonc` — OpenCode project config (plugins, disabled built-ins).
+- `oh-my-opencode-slim.jsonc` — OMO slim preset + agent fleet config.
 
-## Template types
+### AI instruction layers
 
-- **AGENTS.md** - AI agent context files.
-- **CLAUDE.md** - Claude Code main instructions (also read by Copilot).
-- **Cursor rules** - `.mdc` files for IDE behavior.
-- **Cursor commands** - `.md` files for custom workflows.
-- **GitHub prompts** - `.prompt.md` files for reusable prompts.
-- **GitHub instructions** - `.instructions.md` files for context.
-- **Claude rules** - Thin wrappers pointing to shared rule snippets.
-- **Rule snippets** - Shared content in `.claude/rules-snippets/`.
+Rules, skills, and commands are shared across tools via a thin-wrapper pattern:
 
-## Cross-compatible architecture
+1. **Shared snippets** — `.claude/rules-snippets/` and `.claude/prompt-snippets/` hold the real content.
+2. **Thin wrappers** — `.claude/rules/`, `.opencode/rules/`, and `.agents/rules/` contain short files that point to the shared snippets. Claude Code, OpenCode, and other tools each read their own rules directory; the snippets stay DRY.
+3. **Skills** — `.agents/skills/` holds OpenCode skill definitions (ponytail-*, orient-to-recent-work, gh-cli).
+4. **Commands** — `.opencode/commands/` and `.claude/commands/` hold tool-specific slash commands.
+5. **Plugins** — `.opencode/plugins/` holds OpenCode server-side plugins (auto-discovered, no config needed).
 
-This toolkit uses a layered architecture for cross-tool compatibility:
+### CI/CD
 
-1. **Shared layer** (both Claude Code and Copilot read):
-   - `CLAUDE.md` — Single main instructions file
-   - `.claude/skills/` — Shared skill definitions
-   - `.claude/prompt-snippets/` — Shared content fragments
-
-2. **Copilot source of truth**:
-   - `.github/instructions/` — Full detailed rules
-   - `.github/agents/` — Full agent definitions
-   - `.github/prompts/` — Reusable prompts
-
-3. **Claude thin wrappers**:
-   - `.claude/rules/` — Points to `.claude/rules-snippets/`
-   - `.claude/agents/` — Points to shared prompt snippets
-
-4. **Tool-specific**:
-   - `.cursor/` — Cursor IDE (independent)
-   - `.mcp.json` — Claude Code MCP config
-   - `.vscode/mcp.json` — GitHub Copilot MCP config
+- `.github/workflows/` — GitHub Actions for release and npm publish.
