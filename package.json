@@ -1,0 +1,25 @@
+{
+  "name": "nitm-opencode-starter",
+  "version": "0.1.0",
+  "description": "Bootstrap, patch, upgrade, and doctor an OpenCode setup with the NITM Opencode Starter config.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninjasitm/nitm-opencode-starter.git"
+  },
+  "bin": {
+    "nitm-opencode-starter": "bin/cli.js"
+  },
+  "files": [
+    "bin/cli.js",
+    "opencode.jsonc",
+    "oh-my-opencode-slim.jsonc",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

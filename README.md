@@ -6,6 +6,22 @@ This is an opinionated starter, not a general guide. It ships a working OpenCode
 - **Quick Setup**: human-readable checklist, same steps.
 - **Full Guide**: reference for every option and tradeoff.
 
+# CLI
+
+This starter ships an npm CLI so you can bootstrap any repo with one command. Run it from the root of the project you want to set up:
+
+```bash
+npx nitm-opencode-starter install   # copy config into this repo, then run the bootstrap patch flow
+npx nitm-opencode-starter patch     # re-run the bootstrap patch flow (ensure config + plugins)
+npx nitm-opencode-starter upgrade   # re-copy + merge latest config, then re-run plugin installs
+npx nitm-opencode-starter doctor    # checklist: verify tools and config are installed
+```
+
+- `install`: copies `opencode.jsonc` and `oh-my-opencode-slim.jsonc` into the current repo (skips files that already exist unless `--force`), then runs `patch`.
+- `patch`: ensures the config files are present and installs the two plugins (`bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`; `bun` is installed first if missing).
+- `upgrade`: merges the latest starter config into the current repo's config (your active `preset`, extra plugins, and custom presets/agents are preserved; originals are backed up to a temp directory), then re-runs the plugin installs. Asks for confirmation before overwriting; in non-interactive shells `--yes` is required to proceed (without it the upgrade is refused).
+- `doctor`: prints a checklist of whether OpenCode, bun, ponytail, the oh-my-opencode-slim plugin, and the starter config files are present, with a fix line for anything missing. Exits non-zero if any check fails.
+
 # LLM Setup
 
 Copy-paste the block below into any LLM assistant (OpenCode itself, ChatGPT, Claude, etc.) to have it set up this starter for you. It assumes OpenCode Go as the default model provider and the [NITM AI-Assisted Development Toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/) as a prerequisite.

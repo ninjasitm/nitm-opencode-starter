@@ -1,0 +1,42 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - name: Verify tag matches package version
+        run: |
+          node -e "const v=require('./package.json').version; const tag=process.env.GITHUB_REF_NAME; if(tag!=='v'+v){console.error('Tag '+tag+' does not match package version v'+v); process.exit(1);} console.log('Tag '+tag+' matches package v'+v);"
+      - run: npm publish
+        env:
+          # NPM_TOKEN must be an npm Automation token (bypasses 2FA); a regular
+          # 2FA-enabled token fails in CI. OIDC trusted publishing is an
+          # alternative but requires npm publisher configuration.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
