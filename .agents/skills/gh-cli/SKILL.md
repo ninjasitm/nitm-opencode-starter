@@ -267,37 +267,34 @@ Manage PR review comments and resolve threads.
 ### List Review Threads
 
 ```bash
-# List unresolved review threads via GraphQL (first page)
-gh api graphql -f query='
-{
-  repository(owner: "OWNER", name: "REPO") {
-    pullRequest(number: 123) {
-      reviewThreads(first: 50) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id
-          isResolved
-          comments(first: 1) {
-            nodes {
-              id
-              databaseId
-              body
-              path
-              line
+# List ALL unresolved review threads — paginate through every page.
+cursor=""
+while :; do
+  after=$([ -z "$cursor" ] && echo "" || echo ", after: \"$cursor\"")
+  resp=$(gh api graphql -f query="{
+    repository(owner: \"OWNER\", name: \"REPO\") {
+      pullRequest(number: 123) {
+        reviewThreads(first: 100$after) {
+          pageInfo { hasNextPage endCursor }
+          nodes {
+            id
+            isResolved
+            comments(first: 1) {
+              nodes { databaseId body path line }
             }
           }
         }
       }
     }
-  }
-}'
-
-# Filter to unresolved only with jq
-gh api graphql -f query='...' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {id, databaseId: .comments.nodes[0].databaseId, file: .comments.nodes[0].path, body: .comments.nodes[0].body}'
-
-# If pageInfo.hasNextPage is true, paginate by passing endCursor as $cursor
-# and adding `after: $cursor` to the reviewThreads argument, repeating until
-# hasNextPage is false.
+  }")
+  # Emit unresolved threads from this page: <threadId> <commentDatabaseId> <file>
+  echo "$resp" | jq -r '.data.repository.pullRequest.reviewThreads.nodes[]
+    | select(.isResolved == false)
+    | "\(.id)\t\(.comments.nodes[0].databaseId)\t\(.comments.nodes[0].path)"'
+  has_next=$(echo "$resp" | jq -r '.data.repository.pullRequest.reviewThreads.pageInfo.hasNextPage')
+  cursor=$(echo "$resp" | jq -r '.data.repository.pullRequest.reviewThreads.pageInfo.endCursor')
+  [ "$has_next" = true ] || break
+done
 ```
 
 ### Reply to a Review Comment
@@ -359,33 +356,13 @@ gh api repos/OWNER/REPO/pulls/123/reviews -X POST \
 ### Full Workflow: Fix Comments and Resolve Threads
 
 ```bash
-# 1. List unresolved threads
-gh api graphql -f query='{
-  repository(owner: "OWNER", name: "REPO") {
-    pullRequest(number: 123) {
-      reviewThreads(first: 50) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id
-          isResolved
-          comments(first: 1) {
-            nodes {
-              id
-              databaseId
-              body
-              path
-            }
-          }
-        }
-      }
-    }
-  }
-}' --jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false) | {thread_id: .id, databaseId: .comments.nodes[0].databaseId, file: .comments.nodes[0].path}'
+# 1. List unresolved threads (paginate through all pages — see "List Review Threads" above).
+#    Capture each thread's id (for resolveReviewThread) and comments[0].databaseId (for REST replies).
 
 # 2. Make fixes, commit, push
 git add -A && git commit -m "fix: address review comments" && git push
 
-# 3. Reply to each comment (REST — needs integer databaseId)
+# 3. Reply to each comment (REST — needs integer databaseId from step 1)
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_DATABASE_ID/replies -X POST -f body="Fixed in commit abc123."
 
 # 4. Resolve each thread
