@@ -7,6 +7,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const readline = require("readline");
 const { execSync } = require("child_process");
 const os = require("os");
 
@@ -16,6 +17,8 @@ const PKG_DIR = path.join(__dirname, "..");
 // Keys whose user value is always preserved during an upgrade merge.
 const PRESERVE_KEYS = new Set(["preset"]);
 // Array keys that are unioned (user extras kept) instead of replaced.
+// Only `plugin` is unioned; all other arrays (e.g. model) and non-array leaf
+// fields are replaced by the package value on upgrade.
 const UNION_ARRAYS = new Set(["plugin"]);
 
 function log(...a) {
@@ -67,10 +70,19 @@ function stripJsonc(text) {
       i += 2;
       continue;
     }
+    // trailing-comma removal: skip comma followed by } or ]
+    if (c === ",") {
+      let j = i + 1;
+      while (j < n && (text[j] === " " || text[j] === "\n" || text[j] === "\r" || text[j] === "\t")) j++;
+      if (j < n && (text[j] === "}" || text[j] === "]")) {
+        i++;
+        continue;
+      }
+    }
     out += c;
     i++;
   }
-  return out.replace(/,(\s*[}\]])/g, "$1");
+  return out;
 }
 
 function parseJsonc(text) {
@@ -102,7 +114,7 @@ function mergeConfig(pkg, user) {
 
 function tryRun(cmd) {
   try {
-    execSync(cmd, { stdio: "ignore" });
+    execSync(cmd, { stdio: "ignore", timeout: 15000 });
     return true;
   } catch {
     return false;
@@ -110,7 +122,12 @@ function tryRun(cmd) {
 }
 
 function run(cmd) {
-  execSync(cmd, { stdio: "inherit" });
+  try {
+    execSync(cmd, { stdio: "inherit", timeout: 300000 });
+  } catch {
+    fail("Command failed:", cmd);
+    process.exit(1);
+  }
 }
 
 function ensureBun() {
@@ -130,9 +147,9 @@ function installPlugins() {
 // --- file ops ---
 
 function backup(p) {
-  const bak = p + ".bak";
-  fs.copyFileSync(p, bak);
-  log("Backed up existing", path.basename(p), "to", path.basename(bak));
+  const bakDir = fs.mkdtempSync(path.join(os.tmpdir(), "nitm-opencode-starter-bak-"));
+  fs.copyFileSync(p, path.join(bakDir, path.basename(p)));
+  log("Backed up existing", path.basename(p), "to", path.join(bakDir, path.basename(p)));
 }
 
 function copyMissing() {
@@ -185,7 +202,7 @@ function cmdInstall(force) {
   log("Initializing OpenCode for", process.cwd());
   if (force) copyForce();
   else copyMissing();
-  runBootstrapPatch();
+  installPlugins();
   log("Install complete. Run `opencode` from this directory to start.");
 }
 
@@ -195,28 +212,27 @@ function cmdPatch() {
   log("Patch complete.");
 }
 
-function confirm(message, yes) {
-  if (yes) return true;
-  if (!process.stdin.isTTY) {
+function confirm(message, yes, input = process.stdin) {
+  if (yes) return Promise.resolve(true);
+  if (input.isTTY === false) {
     warn("Non-interactive shell: refusing upgrade without --yes.");
-    return false;
+    return Promise.resolve(false);
   }
-  process.stdout.write(message + " [y/N] ");
-  let ans = "";
-  try {
-    ans = fs.readFileSync(0, "utf8").trim().toLowerCase();
-  } catch {
-    return false;
-  }
-  return ans === "y" || ans === "yes";
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({ input });
+    rl.question(message + " [y/N] ", (ans) => {
+      rl.close();
+      resolve(ans.trim().toLowerCase() === "y" || ans.trim().toLowerCase() === "yes");
+    });
+  });
 }
 
-function cmdUpgrade(yes) {
+async function cmdUpgrade(yes) {
   log("Upgrade will update your starter config to the latest version.");
   log("Versioned model assignments in opencode.jsonc / oh-my-opencode-slim.jsonc are overwritten with the latest starter values.");
   log("Your active `preset`, extra plugins, and any custom presets/agents you added are preserved.");
-  log("A backup of each current config file is saved as <file>.bak before writing.");
-  if (!confirm("Continue with upgrade?", yes)) {
+  log("A backup of each current config file is saved to a temp directory before writing.");
+  if (!await confirm("Continue with upgrade?", yes)) {
     log("Aborted. No changes made.");
     return;
   }
@@ -299,23 +315,23 @@ function cmdDoctor() {
 
 // --- entry ---
 
-function main() {
+async function main() {
   const args = process.argv.slice(2);
   const cmd = args[0];
   const force = args.includes("--force");
   const yes = args.includes("--yes") || args.includes("-y");
   switch (cmd) {
     case "install":
-      cmdInstall(force);
+      await cmdInstall(force);
       break;
     case "patch":
-      cmdPatch();
+      await cmdPatch();
       break;
     case "upgrade":
-      cmdUpgrade(yes);
+      await cmdUpgrade(yes);
       break;
     case "doctor":
-      cmdDoctor();
+      await cmdDoctor();
       break;
     case "help":
     case "--help":
@@ -337,6 +353,8 @@ Usage:
   }
 }
 
-if (require.main === module) main();
+if (require.main === module) {
+  main().catch((err) => { fail("Unexpected error:", (err && err.stack) || err); process.exit(1); });
+}
 
-module.exports = { stripJsonc, parseJsonc, mergeConfig, mergeConfigFiles, copyMissing, copyForce, findPluginDir };
+module.exports = { stripJsonc, parseJsonc, mergeConfig, mergeConfigFiles, copyMissing, copyForce, findPluginDir, confirm };

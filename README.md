@@ -19,7 +19,7 @@ npx nitm-opencode-starter doctor    # checklist: verify tools and config are ins
 
 - `install`: copies `opencode.jsonc` and `oh-my-opencode-slim.jsonc` into the current repo (skips files that already exist unless `--force`), then runs `patch`.
 - `patch`: ensures the config files are present and installs the two plugins (`bunx oh-my-opencode-slim@latest install` and `npm i -g @dietrichgebert/ponytail`; `bun` is installed first if missing).
-- `upgrade`: merges the latest starter config into the current repo's config (your active `preset`, extra plugins, and custom presets/agents are preserved; originals are backed up as `*.bak`), then re-runs the plugin installs. Asks for confirmation before overwriting; pass `--yes` to skip the prompt in non-interactive use.
+- `upgrade`: merges the latest starter config into the current repo's config (your active `preset`, extra plugins, and custom presets/agents are preserved; originals are backed up to a temp directory), then re-runs the plugin installs. Asks for confirmation before overwriting; in non-interactive shells `--yes` is required to proceed (without it the upgrade is refused).
 - `doctor`: prints a checklist of whether OpenCode, bun, ponytail, the oh-my-opencode-slim plugin, and the starter config files are present, with a fix line for anything missing. Exits non-zero if any check fails.
 
 # LLM Setup

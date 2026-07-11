@@ -5,6 +5,7 @@ const assert = require("node:assert");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { Readable } = require("node:stream");
 
 const ROOT = path.join(__dirname, "..");
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "nitm-test-"));
@@ -79,5 +80,44 @@ test("mergeConfigFiles backs up and merges, preserving customizations", () => {
   assert.strictEqual(merged.preset, "balanced");
   assert.ok(merged.customKey === "keep");
   assert.ok(merged.plugin.includes("user-extra"));
-  assert.ok(fs.existsSync("opencode.jsonc.bak"), "backup created");
+  assert.ok(!fs.existsSync("opencode.jsonc.bak"), "backup goes to temp dir, not cwd");
+});
+
+test("confirm resolves true when user types y", async () => {
+  const result = await cli.confirm("msg", false, Readable.from("y\n"));
+  assert.strictEqual(result, true);
+});
+
+test("confirm resolves false when user types n", async () => {
+  const result = await cli.confirm("msg", false, Readable.from("n\n"));
+  assert.strictEqual(result, false);
+});
+
+test("confirm returns false for non-interactive input", async () => {
+  const result = await cli.confirm("msg", false, { isTTY: false });
+  assert.strictEqual(result, false);
+});
+
+test("parseJsonc preserves comment-like content inside strings and strips block comments", () => {
+  const src = `{
+    // line comment
+    "a": 1, /* block */ "b": 2,
+    "arr": [1, 2, 3,],
+    "nested": { "x": 1, },
+    "url": "https://example.com/path?query=1",
+    "text": "/* not a comment */",
+    "escaped": "Line1\\nLine2\\\\/* still not a comment */"
+    /*
+      multi-line block comment that should be stripped
+    */
+  }`;
+  const obj = cli.parseJsonc(src);
+  assert.strictEqual(obj.a, 1);
+  assert.strictEqual(obj.b, 2);
+  assert.deepStrictEqual(obj.arr, [1, 2, 3]);
+  assert.deepStrictEqual(obj.nested, { x: 1 });
+  assert.strictEqual(obj.url, "https://example.com/path?query=1");
+  assert.strictEqual(obj.text, "/* not a comment */");
+  // JSON.parse interprets \n as newline and \\ as single backslash
+  assert.strictEqual(obj.escaped, "Line1\nLine2\\/* still not a comment */");
 });
