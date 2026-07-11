@@ -1,0 +1,38 @@
+name: Release on merge to main
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+
+  tag:
+    needs: test
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Bump version, tag, and push
+        run: |
+          node -c bin/cli.js
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          NEW_VERSION=$(node -e "const fs=require('fs');const p='package.json';const j=JSON.parse(fs.readFileSync(p));const v=j.version.split('.');v[2]=+v[2]+1;j.version=v.join('.');fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');console.log(j.version)")
+          git add package.json
+          git commit -m "chore: release v${NEW_VERSION} [skip ci]"
+          git tag "v${NEW_VERSION}"
+          git push origin main --follow-tags
