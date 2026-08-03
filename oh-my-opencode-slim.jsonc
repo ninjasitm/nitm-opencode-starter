@@ -325,10 +325,6 @@
           {
             "id": "opencode-go/deepseek-v4-pro",
             "variant": "max"
-          },
-          {
-            "id": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -344,7 +340,7 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "high"
           }
         ],
@@ -667,7 +663,7 @@
       "planner": {
         "model": [
           {
-            "id": "opencode-go/mimo-v2-5-pro",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "max"
           },
           {
@@ -1015,7 +1011,7 @@
       "green": {
         "model": [
           {
-            "id": "opencode-go/deepseek-v4-flash-free",
+            "id": "opencode/deepseek-v4-flash-free",
             "variant": "max"
           },
           {
@@ -1057,7 +1053,7 @@
             "variant": "medium"
           },
           {
-            "id": "opencode-go/mimo-v2-5-pro",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "max"
           }
         ],
@@ -1108,7 +1104,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "high"
           }
         ],
@@ -1159,6 +1155,10 @@
           {
             "id": "opencode/nemotron-3-ultra-free",
             "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -1449,6 +1449,10 @@
           {
             "id": "opencode-go/minimax-m3",
             "variant": "high"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -1721,7 +1725,7 @@
             "variant": "medium"
           },
           {
-            "id": "opencode-go/mimo-v2-5-pro",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "max"
           },
           {
@@ -1780,7 +1784,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "high"
           }
         ],
