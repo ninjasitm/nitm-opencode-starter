@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
-  "preset": "default",
+  "preset": "openai",
   "compactSidebar": false,
   "presets": {
     "default": {
@@ -15,7 +15,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "max"
           }
         ],
@@ -45,7 +45,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -58,12 +58,12 @@
       "designer": {
         "model": [
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "max"
+            "id": "opencode-go/kimi-k3",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "opencode-go/glm-5.2",
+            "variant": "medium"
           },
           {
             "id": "opencode-go/minimax-m3",
@@ -75,15 +75,15 @@
       "explorer": {
         "model": [
           {
-            "id": "opencode-go/mimo-v2.5-pro",
-            "variant": "high"
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
           },
           {
             "id": "opencode/mimo-v2.5-free",
             "variant": "high"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "high"
           }
         ],
@@ -149,7 +149,7 @@
       "admin-portal": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "high"
           },
           {
@@ -170,7 +170,7 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -183,7 +183,7 @@
       "backend-architect": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "high"
           },
           {
@@ -221,7 +221,7 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -230,7 +230,7 @@
       "frontend-developer": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -255,7 +255,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -265,7 +265,7 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           },
           {
             "id": "opencode-go/mimo-v2.5-pro",
@@ -290,7 +290,7 @@
           },
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -302,7 +302,7 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -319,16 +319,12 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
             "id": "opencode-go/deepseek-v4-pro",
             "variant": "max"
-          },
-          {
-            "id": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -344,7 +340,7 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "high"
           }
         ],
@@ -371,10 +367,10 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -393,12 +389,12 @@
             "variant": "high"
           },
           {
-            "id": "opencode/claude-sonnet-5",
-            "variant": "medium"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "high"
           },
           {
-            "id": "opencode-go/mimo-v2.5-pro",
-            "variant": "max"
+            "id": "anthropic/claude-sonnet-5",
+            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -406,15 +402,15 @@
       "oracle": {
         "model": [
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "max"
-          },
-          {
             "id": "opencode-go/mimo-v2.5-pro",
             "variant": "high"
           },
           {
-            "id": "opencode/gpt-5.5",
+            "id": "openai/gpt-5.6-sol",
+            "variant": "high"
+          },
+          {
+            "id": "anthropic/claude-opus-4-8",
             "variant": "medium"
           }
         ],
@@ -427,12 +423,12 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "max"
+            "id": "anthropic/claude-opus-4-8",
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -440,15 +436,15 @@
       "designer": {
         "model": [
           {
-            "id": "opencode/claude-sonnet-5",
+            "id": "opencode-go/kimi-k3",
             "variant": "medium"
           },
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "medium"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "high"
           },
           {
-            "id": "opencode-go/minimax-m3",
+            "id": "anthropic/claude-sonnet-5",
             "variant": "high"
           }
         ],
@@ -495,12 +491,12 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
+            "id": "openai/gpt-5.6-luna",
             "variant": "high"
           },
           {
-            "id": "opencode/qwen3.7-plus",
-            "variant": "high"
+            "id": "anthropic/claude-sonnet-5",
+            "variant": "low"
           }
         ],
         "temperature": 0.1,
@@ -531,15 +527,15 @@
       "admin-portal": {
         "model": [
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "max"
-          },
-          {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "high"
           },
           {
-            "id": "opencode-go/minimax-m3",
+            "id": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "id": "anthropic/claude-sonnet-5",
             "variant": "high"
           }
         ],
@@ -548,11 +544,15 @@
       "api-specialist": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
+            "id": "openai/gpt-5.6-terra",
             "variant": "high"
           }
         ],
@@ -565,11 +565,11 @@
             "variant": "low"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "openai/gpt-5.6-terra",
             "variant": "high"
           },
           {
-            "id": "opencode-go/minimax-m3",
+            "id": "opencode-go/kimi-k3",
             "variant": "high"
           }
         ],
@@ -584,6 +584,10 @@
           {
             "id": "opencode-go/mimo-v2.5-pro",
             "variant": "high"
+          },
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -591,16 +595,16 @@
       "feature-builder": {
         "model": [
           {
-            "id": "opencode/claude-sonnet-5",
-            "variant": "low"
-          },
-          {
             "id": "opencode/deepseek-v4-flash-free",
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode/claude-opus-4-8",
+            "variant": "medium"
           }
         ],
         "temperature": 0.3
@@ -608,16 +612,16 @@
       "frontend-developer": {
         "model": [
           {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          },
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
             "id": "opencode/claude-sonnet-5",
-            "variant": "low"
-          },
-          {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
-          },
-          {
-            "id": "opencode-go/minimax-m3",
-            "variant": "max"
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -626,15 +630,15 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "max"
+            "variant": "high"
           },
           {
-            "id": "opencode-go/mimo-v2.5-pro",
-            "variant": "max"
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "opencode/claude-sonnet-5",
+            "variant": "low"
           }
         ],
         "temperature": 0.1
@@ -643,15 +647,15 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "openai/gpt-5.6-luna",
             "variant": "high"
           },
           {
             "id": "opencode-go/mimo-v2.5-pro",
             "variant": "high"
-          },
-          {
-            "id": "opencode-go/deepseek-v4-pro",
-            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -659,15 +663,15 @@
       "planner": {
         "model": [
           {
-            "id": "opencode-go/mimo-v2-5-pro",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "max"
           },
           {
-            "id": "opencode-go/minimax-m3",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "high"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
+            "id": "opencode/claude-sonnet-5",
             "variant": "high"
           }
         ],
@@ -676,16 +680,16 @@
       "red": {
         "model": [
           {
-            "id": "opencode/mimo-v2.5-free",
-            "variant": "high"
-          },
-          {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
-            "variant": "max"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode/claude-opus-4-8",
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -693,16 +697,16 @@
       "refactor": {
         "model": [
           {
-            "id": "opencode/mimo-v2.5-free",
-            "variant": "high"
-          },
-          {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
-            "variant": "max"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode/claude-opus-4-8",
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -714,12 +718,12 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/minimax-m3",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
-            "variant": "high"
+            "id": "opencode/claude-sonnet-5",
+            "variant": "medium"
           }
         ],
         "temperature": 0.1
@@ -727,15 +731,15 @@
       "reviewer": {
         "model": [
           {
-            "id": "opencode/claude-sonnet-5",
-            "variant": "high"
-          },
-          {
             "id": "opencode-go/deepseek-v4-pro",
             "variant": "max"
           },
           {
-            "id": "opencode-go/mimo-v2.5-pro",
+            "id": "openai/gpt-5.6-sol",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/claude-opus-4-8",
             "variant": "high"
           }
         ],
@@ -744,16 +748,16 @@
       "tdd": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
+            "id": "openai/gpt-5.6-terra",
             "variant": "high"
           },
           {
-            "id": "opencode/qwen3.7-plus",
-            "variant": "max"
+            "id": "opencode/claude-opus-4-8",
+            "variant": "high"
           }
         ],
         "temperature": 0.3
@@ -784,7 +788,7 @@
             "variant": "medium"
           },
           {
-            "id": "opencode/gpt-5.5",
+            "id": "openai/gpt-5.6-terra",
             "variant": "medium"
           },
           {
@@ -801,7 +805,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -822,7 +826,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -831,8 +835,8 @@
       "explorer": {
         "model": [
           {
-            "id": "opencode/gpt-5.4-mini",
-            "variant": "low"
+            "id": "openai/gpt-5.6-luna",
+            "variant": "medium"
           },
           {
             "id": "opencode/deepseek-v4-flash-free",
@@ -848,8 +852,8 @@
       "librarian": {
         "model": [
           {
-            "id": "opencode/gpt-5.4-mini",
-            "variant": "low"
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
           },
           {
             "id": "opencode/deepseek-v4-flash-free",
@@ -865,16 +869,16 @@
       "fixer": {
         "model": [
           {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
             "id": "opencode/claude-sonnet-5",
             "variant": "low"
           },
           {
-            "id": "opencode/gpt-5.4",
+            "id": "openai/gpt-5.6-terra",
             "variant": "low"
-          },
-          {
-            "id": "opencode/qwen3.7-plus",
-            "variant": "high"
           }
         ],
         "temperature": 0.1,
@@ -885,7 +889,7 @@
       "observer": {
         "model": [
           {
-            "id": "opencode/gpt-5.4-mini",
+            "id": "openai/gpt-5.6-terra",
             "variant": "low"
           },
           {
@@ -906,10 +910,10 @@
         "model": [
           {
             "id": "opencode-go/glm-5.2",
-            "variant": "max"
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "high"
           },
           {
@@ -922,15 +926,15 @@
       "api-specialist": {
         "model": [
           {
-            "id": "opencode-go/glm-5.2",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
           },
           {
             "id": "opencode/mimo-v2.5-free",
             "variant": "high"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -943,12 +947,12 @@
             "variant": "low"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "high"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
-            "variant": "max"
+            "id": "opencode-go/kimi-k3",
+            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -973,11 +977,15 @@
             "variant": "low"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -990,11 +998,11 @@
             "variant": "low"
           },
           {
-            "id": "opencode-go/minimax-m3",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "low"
           },
           {
-            "id": "opencode-go/glm-5.2",
+            "id": "opencode-go/minimax-m3",
             "variant": "max"
           }
         ],
@@ -1011,7 +1019,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -1021,7 +1029,7 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           },
           {
             "id": "opencode-go/mimo-v2.5-pro",
@@ -1038,14 +1046,14 @@
         "model": [
           {
             "id": "opencode/claude-sonnet-5",
-            "variant": "low"
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/mimo-v2-5-pro",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/minimax-m3",
+            "id": "opencode-go/mimo-v2.5-pro",
             "variant": "max"
           }
         ],
@@ -1054,15 +1062,15 @@
       "red": {
         "model": [
           {
-            "id": "opencode-go/mimo-v2.5-pro",
-            "variant": "high"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "opencode/claude-sonnet-5",
+            "variant": "medium"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           }
         ],
@@ -1075,16 +1083,12 @@
             "variant": "low"
           },
           {
-            "id": "opencode-go/kimi-k2.7-code",
-            "variant": "max"
+            "id": "openai/gpt-5.6-terra",
+            "variant": "low"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
-          },
-          {
-            "id": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ],
         "temperature": 0.1
@@ -1100,7 +1104,7 @@
             "variant": "max"
           },
           {
-            "id": "opencode-go/qwen-3.7-plus",
+            "id": "opencode-go/qwen3.7-plus",
             "variant": "high"
           }
         ],
@@ -1113,12 +1117,12 @@
             "variant": "high"
           },
           {
-            "id": "opencode-go/deepseek-v4-pro",
-            "variant": "max"
+            "id": "openai/gpt-5.6-sol",
+            "variant": "high"
           },
           {
-            "id": "opencode-go/mimo-v2.5-pro",
-            "variant": "high"
+            "id": "opencode-go/deepseek-v4-pro",
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -1126,7 +1130,7 @@
       "tdd": {
         "model": [
           {
-            "id": "opencode-go/kimi-k2.7-code",
+            "id": "opencode-go/kimi-k3",
             "variant": "max"
           },
           {
@@ -1145,16 +1149,16 @@
       "orchestrator": {
         "model": [
           {
-            "id": "opencode/hy3-free",
-            "variant": "max"
-          },
-          {
             "id": "opencode/mimo-v2.5-free",
             "variant": "high"
           },
           {
             "id": "opencode/nemotron-3-ultra-free",
             "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -1162,22 +1166,26 @@
       "oracle": {
         "model": [
           {
-            "id": "opencode/hy3-free",
-            "variant": "max"
-          },
-          {
-            "id": "opencode/deepseek-v4-flash-free",
+            "id": "opencode/big-pickle",
             "variant": "max"
           },
           {
             "id": "opencode/mimo-v2.5-free",
             "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
           }
         ],
         "temperature": 0.1
       },
       "council": {
         "model": [
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          },
           {
             "id": "opencode/deepseek-v4-flash-free",
             "variant": "max"
@@ -1215,6 +1223,10 @@
       "fixer": {
         "model": [
           {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
             "id": "opencode/big-pickle",
             "variant": "max"
           },
@@ -1265,7 +1277,7 @@
           },
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -1273,11 +1285,11 @@
       "backend-architect": {
         "model": [
           {
-            "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "max"
           },
           {
-            "id": "opencode/mimo-v2.5-free",
+            "id": "opencode/deepseek-v4-flash-free",
             "variant": "high"
           }
         ],
@@ -1299,12 +1311,12 @@
       "feature-builder": {
         "model": [
           {
-            "id": "opencode/big-pickle",
+            "id": "opencode/mimo-v2.5-free",
             "variant": "max"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "id": "opencode/big-pickle",
+            "variant": "max"
           }
         ],
         "temperature": 0.3
@@ -1338,12 +1350,12 @@
       "implementer": {
         "model": [
           {
-            "id": "opencode/mimo-v2.5-free",
+            "id": "opencode/deepseek-v4-flash-free",
             "variant": "high"
           },
           {
-            "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "max"
           }
         ],
         "temperature": 0.1
@@ -1351,11 +1363,11 @@
       "planner": {
         "model": [
           {
-            "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "max"
           },
           {
-            "id": "opencode/mimo-v2.5-free",
+            "id": "opencode/deepseek-v4-flash-free",
             "variant": "high"
           }
         ],
@@ -1390,10 +1402,6 @@
       "researcher": {
         "model": [
           {
-            "id": "opencode/hy3-free",
-            "variant": "max"
-          },
-          {
             "id": "opencode/deepseek-v4-flash-free",
             "variant": "max"
           },
@@ -1421,11 +1429,397 @@
         "model": [
           {
             "id": "opencode/deepseek-v4-flash-free",
-            "variant": "high"
+            "variant": "max"
           },
           {
             "id": "opencode/nemotron-3-ultra-free",
             "variant": "max"
+          }
+        ],
+        "temperature": 0.3
+      }
+    },
+    "openai": {
+      "orchestrator": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-sol",
+            "variant": "low"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "oracle": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-sol",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "council": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/deepseek-v4-pro",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "designer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/glm-5.2",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "explorer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "librarian": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "fixer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "opencode/qwen3.7-plus",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1,
+        "options": {
+          "reasoningEffort": "max"
+        }
+      },
+      "observer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/gemini-3.5-flash",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1,
+        "options": {
+          "reasoningEffort": "max"
+        }
+      },
+      "admin-portal": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/glm-5.2",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "api-specialist": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/glm-5.2",
+            "variant": "max"
+          },
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "backend-architect": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-sol",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "documenter": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "high"
+          },
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "feature-builder": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.3
+      },
+      "frontend-developer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "low"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/glm-5.2",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "green": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "low"
+          },
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "implementer": {
+        "model": [
+          {
+            "id": "opencode/deepseek-v4-flash-free",
+            "variant": "max"
+          },
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "planner": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "red": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-luna",
+            "variant": "low"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/deepseek-v4-pro",
+            "variant": "max"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "refactor": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          },
+          {
+            "id": "opencode/mimo-v2.5-free",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "researcher": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/deepseek-v4-pro",
+            "variant": "high"
+          },
+          {
+            "id": "opencode-go/minimax-m3",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/qwen3.7-plus",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "reviewer": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/deepseek-v4-pro",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
+          }
+        ],
+        "temperature": 0.1
+      },
+      "tdd": {
+        "model": [
+          {
+            "id": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "id": "opencode-go/kimi-k3",
+            "variant": "max"
+          },
+          {
+            "id": "opencode-go/mimo-v2.5-pro",
+            "variant": "high"
           }
         ],
         "temperature": 0.3
