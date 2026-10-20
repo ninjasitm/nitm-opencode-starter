@@ -1,6 +1,6 @@
 {
   "name": "nitm-opencode-starter",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Bootstrap, patch, upgrade, and doctor an OpenCode setup with the NITM Opencode Starter config.",
   "repository": {
     "type": "git",
