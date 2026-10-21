@@ -190,7 +190,7 @@ This disables OpenCode's built-in `build` and `general` agents so they do not fi
 
 ### `oh-my-opencode-slim.jsonc`
 
-See [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) for the full contents: all four presets (`default`, `balanced`, `high-cost`, `low-cost`) with every agent's model array, temperature, and variant settings. The file is self-contained; copy it into your project root.
+See [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) for the full contents: all four presets (`default`, `balanced`, `high-cost`, `low-cost`) with every agent's model array and variant settings. The file is self-contained; copy it into your project root.
 
 > **Note on `reasoningEffort`**: set it per-model inside the model array, not at the agent level. Setting it on the agent applies it to every model in the fallback chain, including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain.
 
@@ -249,9 +249,9 @@ Built-in agent rosters by preset:
 | `orchestrator` | `opencode-go/minimax-m3`          | `opencode/deepseek-v4-pro`        | `opencode/mimo-v2.5-pro`               |
 | `oracle`       | `opencode/mimo-v2.5-pro`          | `opencode/minimax-m3`             | `opencode/deepseek-v4-pro`             |
 | `designer`     | `opencode/glm-5.2`                | `opencode/kimi-k2.7-code`         | `opencode/minimax-m3`                  |
-| `fixer`        | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-pro`     | `opencode/qwen3.7-plus` (variant: max) |
-| `explorer`     | `opencode/mimo-v2.5-free`         | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
-| `librarian`    | `opencode/mimo-v2.5-free`         | `opencode-go/minimax-m3`          | `opencode/deepseek-v4-flash-free`      |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` | `opencode-go/deepseek-v4-pro`     | `opencode/qwen3.8-flash` (variant: max) |
+| `explorer`     | `opencode/mimo-v2.6-flash-free`         | `opencode/minimax-m3.1-flash-free` | `opencode-go/deepseek-v4.1-flash`        |
+| `librarian`    | `opencode/mimo-v2.6-flash-free`         | `opencode-go/minimax-m3`          | `opencode/minimax-m3.1-flash-free`      |
 
 ### `balanced` Preset
 
@@ -262,10 +262,10 @@ Mid-cost Go-leaning mix. All 8 built-in agents are active.
 | `orchestrator` | `opencode-go/minimax-m3` (variant: high)     | `opencode/claude-sonnet-5` (medium)      | `opencode-go/mimo-v2.5-pro` (variant: max) |
 | `oracle`       | `opencode-go/glm-5.2` (variant: max)         | `opencode-go/mimo-v2.5-pro` (high)       | `opencode/gpt-5.5` (medium)                |
 | `designer`     | `opencode/claude-sonnet-5` (medium)          | `opencode-go/glm-5.2` (medium)           | `opencode-go/minimax-m3` (high)            |
-| `fixer`        | `opencode/deepseek-v4-flash-free` (high)     | `opencode-go/deepseek-v4-pro` (high)     | `opencode/qwen3.7-plus` (high)             |
-| `explorer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/deepseek-v4-flash` (high)     |
-| `librarian`    | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
-| `observer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` (high)     | `opencode-go/deepseek-v4-pro` (high)     | `opencode/qwen3.8-flash` (high)             |
+| `explorer`     | `opencode/mimo-v2.6-flash-free` (high)             | `opencode/minimax-m3.1-flash-free` (high) | `opencode-go/deepseek-v4.1-flash` (high)     |
+| `librarian`    | `opencode/mimo-v2.6-flash-free` (high)             | `opencode/minimax-m3.1-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
+| `observer`     | `opencode/mimo-v2.6-flash-free` (high)             | `opencode/minimax-m3.1-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
 | `council`      | `opencode-go/deepseek-v4-pro` (variant: max) | `opencode-go/kimi-k2.7-code` (max)       | `opencode-go/glm-5.2` (max)                |
 
 ### `high-cost` Preset
@@ -277,9 +277,9 @@ Frontier models: costs scale with usage; expect this preset to be materially mor
 | `orchestrator` | `opencode/claude-sonnet-5` (medium) | `opencode/gpt-5.4`                | `opencode-go/glm-5.2`                  |
 | `oracle`       | `opencode/claude-opus-4-8` (high)   | `opencode/gpt-5.5` (high)         | `opencode-go/glm-5.2`                  |
 | `designer`     | `opencode/claude-sonnet-5` (low)    | `opencode/gemini-3.1-pro`         | `opencode-go/kimi-k2.7-code`           |
-| `fixer`        | `opencode/claude-sonnet-5`          | `opencode/gpt-5.4`                | `opencode/qwen3.7-plus` (variant: max) |
-| `explorer`     | `opencode/gpt-5.4-mini`             | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
-| `librarian`    | `opencode/gpt-5.4-mini`             | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
+| `fixer`        | `opencode/claude-sonnet-5`          | `opencode/gpt-5.4`                | `opencode/qwen3.8-flash` (variant: max) |
+| `explorer`     | `opencode/gpt-5.4-mini`             | `opencode/minimax-m3.1-flash-free` | `opencode-go/deepseek-v4.1-flash`        |
+| `librarian`    | `opencode/gpt-5.4-mini`             | `opencode/minimax-m3.1-flash-free` | `opencode-go/deepseek-v4.1-flash`        |
 | `observer`     | `opencode/gpt-5.4-mini`             | `opencode/gemini-3.5-flash`       | `opencode-go/minimax-m3`               |
 
 `observer` is the 7th agent unique to this preset: not part of the base 6.
@@ -291,14 +291,14 @@ Every preset agent in `low-cost` is pinned to a single model, at zero marginal c
 | Agent(s)                                 | Model                             | Notes                                       |
 | ---------------------------------------- | --------------------------------- | ------------------------------------------- |
 | `orchestrator`, `designer`               | `opencode-go/minimax-m3`          |                                             |
-| `oracle`, `council`, `fixer`, `observer` | `opencode/mimo-v2.5-free`         | `fixer` and `observer` run at variant `max` |
-| `explorer`, `librarian`                  | `opencode/deepseek-v4-flash-free` | variant `high`                              |
+| `oracle`, `council`, `fixer`, `observer` | `opencode/mimo-v2.6-flash-free`         | `fixer` and `observer` run at variant `max` |
+| `explorer`, `librarian`                  | `opencode/minimax-m3.1-flash-free` | variant `high`                              |
 
 `council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and is not documented elsewhere in this README beyond this table. If you are relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) rather than assuming parity with `oracle`.
 
 ## The Custom Agents
 
-Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each agent come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
+Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body for each custom agent comes from the `nitm-ai-dev-toolkit` package (the agent prompt bodies are not stored in this repo); the model and prompt wiring come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
 
 ### Codegen
 
@@ -307,7 +307,7 @@ Grouped by lane. Lane assignments and one-liners are derived from the agent name
 | `@green`              | Greenfield scaffolding. New repo, blank slate, want a working starting point. |
 | `@frontend-developer` | Frontend implementation. React, Vue, CSS, accessibility.                      |
 | `@backend-architect`  | Backend system design. Service boundaries, data flow, contracts.              |
-| `@feature-builder`    | End-to-end feature factory. Cross-stack change with no special expertise.     |
+| `@feature-builder`    | End-to-end feature pipeline.Cross-stack change with no special expertise.     |
 | `@tdd`                | Red-green-refactor. Strict test-first.                                        |
 | `@refactor`           | Tech-debt cleanup. Behavior-preserving.                                       |
 | `@implementer`        | General-purpose fallback. When nothing else fits.                             |

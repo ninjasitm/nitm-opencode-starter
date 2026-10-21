@@ -2,6 +2,10 @@
 
 Design decision log for the NITM Opencode Starter. Entries are not dated; they document why decisions were made.
 
+## 0.1.4: models refreshed, temperature removed, frontier preset
+
+All `opencode/*` and `opencode-go/*` ids moved to the newest model of the same family and tier; retired ids replaced by current ones. `temperature` is gone from `oh-my-opencode-slim.jsonc` and the `commit-push` command so provider defaults apply. Added the `frontier` preset and moved the `openai` preset to GPT-6 models (the shipped `preset` stays `openai`). `planner`, `implementer` and `reviewer` routing hints now mention Factory spec/plan, build/repair and review/approval work. Custom agent prompt bodies come from `nitm-ai-dev-toolkit`.
+
 ## Default model path is OpenCode Go with Zen fallback
 
 OpenCode Go is a $5/mo (first month) / $10/mo subscription that unlocks the `opencode-go/*` model family on Zen with generous limits (5h rolling $12, weekly $30, monthly $60). It is the recommended primary because:
