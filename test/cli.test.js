@@ -36,6 +36,13 @@ test("parseJsonc parses the shipped config files", () => {
   assert.strictEqual(typeof slim.agents.reviewer.orchestratorPrompt, "string");
 });
 
+test("shipped oh-my-opencode-slim.jsonc has no temperature and a frontier preset", () => {
+  const raw = fs.readFileSync(path.join(ROOT, "oh-my-opencode-slim.jsonc"), "utf8");
+  assert.ok(!raw.includes("temperature"));
+  const slim = cli.parseJsonc(raw);
+  assert.ok(slim.presets.frontier);
+});
+
 test("mergeConfig preserves user preset, unions plugins, keeps custom keys, package wins on models", () => {
   const pkg = {
     preset: "default",
