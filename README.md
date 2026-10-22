@@ -1,6 +1,6 @@
 # NITM Opencode Starter
 
-This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, four presets (`default`, `balanced`, `high-cost`, `low-cost`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. Pick the path that fits:
+This is an opinionated starter, not a general guide. It ships a working OpenCode setup tuned for mixed-skill teams: a curated 14-agent fleet, six presets (`default`, `balanced`, `high-cost`, `low-cost`, `openai`, `frontier`), and a default model path that prefers **OpenCode Go with OpenCode models as the fallback**. You can be running in under ten minutes. Pick the path that fits:
 
 - **LLM Setup**: copy-paste prompt for an AI assistant to do the work.
 - **Quick Setup**: human-readable checklist, same steps.
@@ -75,9 +75,9 @@ Five minutes to your first session, with OpenCode Go as the default model provid
 
 1. **Primary: OpenCode Go.** The $5 first-month / $10/month subscription unlocks the `opencode-go/*` model family on Zen (curated open-coding models with generous limits: 5h rolling $12, weekly $30, monthly $60). Most of the agents in the `default` preset point at Go models first.
 2. **Fallback: OpenCode models.** When Go is unavailable (rate limit, billing paused, model down), the agents fall through to the broader OpenCode model family: Zen pay-as-you-go and the free models on it.
-3. You may switch to `balanced` (mid-cost Go-leaning mix), `high-cost` (frontier-only), or `low-cost` (free-only) presets as your workload changes. Switching requires restarting Opencode (see the `/preset` bug note below).
+3. You may switch to `balanced` (mid-cost Go-leaning mix), `high-cost` (frontier-heavy), `low-cost` (free-only), `openai` (GPT-6 primaries, the shipped `preset`), or `frontier` (Claude Code + OpenAI only) presets as your workload changes. Switching requires restarting Opencode (see the `/preset` bug note below).
 
-The `default` preset in [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-only, `low-cost` is free-only.
+The `default` preset in [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is wired this way: Go primaries, broader OpenCode fallbacks. If you want a different tradeoff, switch presets with `OH_MY_OPENCODE_SLIM_PRESET` (see the `/preset` bug note): `balanced` is a Go-leaning mid-cost mix, `high-cost` is frontier-heavy, `low-cost` is free-only, `openai` leads with GPT-6 models (it is the `preset` the shipped file selects), and `frontier` uses only `claude-code/*` and `openai/*` models.
 
 If you would rather not subscribe to Go, the starter still works with Zen or BYO providers: the table below spells out the trade-offs. The opinionated defaults here are tuned for Go; the other paths get the same agent fleet with different billing.
 
@@ -190,7 +190,7 @@ This disables OpenCode's built-in `build` and `general` agents so they do not fi
 
 ### `oh-my-opencode-slim.jsonc`
 
-See [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) for the full contents: all four presets (`default`, `balanced`, `high-cost`, `low-cost`) with every agent's model array, temperature, and variant settings. The file is self-contained; copy it into your project root.
+See [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) for the full contents: all six presets (`default`, `balanced`, `high-cost`, `low-cost`, `openai`, `frontier`) with every agent's model array and variant settings. The file is self-contained; copy it into your project root.
 
 > **Note on `reasoningEffort`**: set it per-model inside the model array, not at the agent level. Setting it on the agent applies it to every model in the fallback chain, including free/flash models where "max" reasoning effort mostly just burns quota for no quality gain.
 
@@ -214,7 +214,7 @@ Useful for CI or for testing a preset without changing the saved config. The env
 /preset <name>
 ```
 
-Picks from `default`, `balanced`, `high-cost`, `low-cost`.
+Picks from `default`, `balanced`, `high-cost`, `low-cost`, `openai`, `frontier`.
 
 ## Cost snapshot by preset
 
@@ -224,8 +224,10 @@ Rough monthly shape, assuming a single active developer. These are directional, 
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default`   | ~$10/mo flat (Go subscription) + occasional Zen pay-as-you-go overage when Go falls back.                                                                                   |
 | `balanced`  | Go flat fee + a mid-cost mix of Zen models (some frontier calls for hard tasks, some free/flash for routine work). Expect ~$10–30/mo under steady use.                      |
-| `high-cost` | Go flat fee **plus** metered frontier calls (Claude Opus/Sonnet, GPT-5.x, Gemini Pro) on Zen: expect this to be the most expensive preset by a wide margin under heavy use. |
-| `low-cost`  | $0 beyond the Go subscription itself: every agent is pinned to a free model. Trade-off is slower iteration and weaker output on hard tasks.                                 |
+| `high-cost` | Go flat fee **plus** metered frontier calls (Claude Opus/Sonnet, GPT-6.x, Gemini Pro) on Zen: expect this to be the most expensive preset by a wide margin under heavy use. |
+| `low-cost`  | $0 beyond the Go subscription itself: every agent uses only free models. Trade-off is slower iteration and weaker output on hard tasks.                                    |
+| `openai`    | n/a (no cost data). GPT-6 primaries are metered OpenAI usage; fallbacks are Go and Zen models. Depends on how often the primaries are hit.                                  |
+| `frontier`  | n/a (no cost data). Only `claude-code/*` and `openai/*` models, so spend follows your Claude Code and OpenAI plans and usage.                                               |
 
 # Meet the agent fleet
 
@@ -235,70 +237,108 @@ Built-in agent rosters by preset:
 
 | Preset      | Built-in roster                                                                   |
 | ----------- | --------------------------------------------------------------------------------- |
-| `default`   | orchestrator, oracle, designer, fixer, explorer, librarian (6)                    |
+| `default`   | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
 | `balanced`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
-| `high-cost` | orchestrator, oracle, designer, fixer, explorer, librarian, observer (7)          |
+| `high-cost` | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
 | `low-cost`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
+| `openai`    | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
+| `frontier`  | orchestrator, oracle, designer, fixer, explorer, librarian, observer, council (8) |
 
 ## The Presets
 
 ### `default` Preset
 
-| Agent          | Primary                           | Fallback 1                        | Fallback 2                             |
-| -------------- | --------------------------------- | --------------------------------- | -------------------------------------- |
-| `orchestrator` | `opencode-go/minimax-m3`          | `opencode/deepseek-v4-pro`        | `opencode/mimo-v2.5-pro`               |
-| `oracle`       | `opencode/mimo-v2.5-pro`          | `opencode/minimax-m3`             | `opencode/deepseek-v4-pro`             |
-| `designer`     | `opencode/glm-5.2`                | `opencode/kimi-k2.7-code`         | `opencode/minimax-m3`                  |
-| `fixer`        | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-pro`     | `opencode/qwen3.7-plus` (variant: max) |
-| `explorer`     | `opencode/mimo-v2.5-free`         | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
-| `librarian`    | `opencode/mimo-v2.5-free`         | `opencode-go/minimax-m3`          | `opencode/deepseek-v4-flash-free`      |
+Go primaries with broader OpenCode (Zen) fallbacks. All 8 built-in agents are active.
+
+| Agent          | Primary                                            | Fallback 1                                         | Fallback 2                                         |
+| -------------- | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| `orchestrator` | `opencode-go/minimax-m3` (variant: high)           | `opencode-go/mimo-v2.6-pro` (variant: max)         | `opencode-go/qwen3.8-max` (variant: max)           |
+| `oracle`       | `opencode-go/mimo-v2.6-pro` (variant: high)        | `opencode-go/minimax-m3` (variant: high)           | `opencode-go/glm-5.3` (variant: max)               |
+| `designer`     | `opencode-go/kimi-k3` (variant: medium)            | `opencode-go/glm-5.3` (variant: medium)            | `opencode-go/minimax-m3` (variant: high)           |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/deepseek-v4-pro` (variant: high)      | `opencode/qwen3.8-flash` (variant: high)           |
+| `explorer`     | `opencode/minimax-m3.1-flash-free` (variant: max)  | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode-go/mimo-v2.6-pro` (variant: high)        |
+| `librarian`    | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/minimax-m3` (variant: high)           |
+| `observer`     | `opencode-go/minimax-m3` (variant: high)           | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: high) |
+| `council`      | `opencode-go/deepseek-v4-pro` (variant: max)       | `opencode-go/kimi-k3` (variant: max)               | `opencode-go/glm-5.3` (variant: max)               |
 
 ### `balanced` Preset
 
-Mid-cost Go-leaning mix. All 8 built-in agents are active.
+Mid-cost Go-leaning mix with OpenAI and Anthropic fallbacks for hard tasks. All 8 built-in agents are active.
 
-| Agent          | Primary                                      | Fallback 1                               | Fallback 2                                 |
-| -------------- | -------------------------------------------- | ---------------------------------------- | ------------------------------------------ |
-| `orchestrator` | `opencode-go/minimax-m3` (variant: high)     | `opencode/claude-sonnet-5` (medium)      | `opencode-go/mimo-v2.5-pro` (variant: max) |
-| `oracle`       | `opencode-go/glm-5.2` (variant: max)         | `opencode-go/mimo-v2.5-pro` (high)       | `opencode/gpt-5.5` (medium)                |
-| `designer`     | `opencode/claude-sonnet-5` (medium)          | `opencode-go/glm-5.2` (medium)           | `opencode-go/minimax-m3` (high)            |
-| `fixer`        | `opencode/deepseek-v4-flash-free` (high)     | `opencode-go/deepseek-v4-pro` (high)     | `opencode/qwen3.7-plus` (high)             |
-| `explorer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/deepseek-v4-flash` (high)     |
-| `librarian`    | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
-| `observer`     | `opencode/mimo-v2.5-free` (high)             | `opencode/deepseek-v4-flash-free` (high) | `opencode-go/minimax-m3` (high)            |
-| `council`      | `opencode-go/deepseek-v4-pro` (variant: max) | `opencode-go/kimi-k2.7-code` (max)       | `opencode-go/glm-5.2` (max)                |
+| Agent          | Primary                                            | Fallback 1                                         | Fallback 2                                        |
+| -------------- | -------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------- |
+| `orchestrator` | `opencode-go/minimax-m3` (variant: high)           | `openai/gpt-6.1-sol` (variant: high)               | `anthropic/claude-sonnet-5` (variant: high)       |
+| `oracle`       | `opencode-go/mimo-v2.6-pro` (variant: high)        | `openai/gpt-6.1-sol` (variant: high)               | `anthropic/claude-opus-4-8` (variant: medium)     |
+| `designer`     | `opencode-go/kimi-k3` (variant: medium)            | `openai/gpt-6.1-sol` (variant: high)               | `anthropic/claude-sonnet-5` (variant: high)       |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` (variant: high) | `openai/gpt-6-luna` (variant: high)                | `anthropic/claude-sonnet-5` (variant: low)        |
+| `explorer`     | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/deepseek-v4.1-flash` (variant: high) |
+| `librarian`    | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/minimax-m3` (variant: high)          |
+| `observer`     | `opencode/mimo-v2.6-flash-free` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/minimax-m3` (variant: high)          |
+| `council`      | `opencode-go/deepseek-v4-pro` (variant: max)       | `openai/gpt-6.1-sol` (variant: medium)             | `anthropic/claude-opus-4-8` (variant: medium)     |
 
 ### `high-cost` Preset
 
-Frontier models: costs scale with usage; expect this preset to be materially more expensive than `default`, since every fallback is a metered frontier model with no free tier to land on.
+Frontier models: costs scale with usage; expect this preset to be materially more expensive than `default`, since most fallbacks are metered frontier models. All 8 built-in agents are active.
 
-| Agent          | Primary                             | Fallback 1                        | Fallback 2                             |
-| -------------- | ----------------------------------- | --------------------------------- | -------------------------------------- |
-| `orchestrator` | `opencode/claude-sonnet-5` (medium) | `opencode/gpt-5.4`                | `opencode-go/glm-5.2`                  |
-| `oracle`       | `opencode/claude-opus-4-8` (high)   | `opencode/gpt-5.5` (high)         | `opencode-go/glm-5.2`                  |
-| `designer`     | `opencode/claude-sonnet-5` (low)    | `opencode/gemini-3.1-pro`         | `opencode-go/kimi-k2.7-code`           |
-| `fixer`        | `opencode/claude-sonnet-5`          | `opencode/gpt-5.4`                | `opencode/qwen3.7-plus` (variant: max) |
-| `explorer`     | `opencode/gpt-5.4-mini`             | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
-| `librarian`    | `opencode/gpt-5.4-mini`             | `opencode/deepseek-v4-flash-free` | `opencode-go/deepseek-v4-flash`        |
-| `observer`     | `opencode/gpt-5.4-mini`             | `opencode/gemini-3.5-flash`       | `opencode-go/minimax-m3`               |
-
-`observer` is the 7th agent unique to this preset: not part of the base 6.
+| Agent          | Primary                                            | Fallback 1                                         | Fallback 2                                        |
+| -------------- | -------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------- |
+| `orchestrator` | `opencode/claude-sonnet-5-5` (variant: medium)     | `opencode/gpt-6.1-sol` (variant: medium)           | `opencode-go/glm-5.3` (variant: medium)           |
+| `oracle`       | `opencode/claude-opus-5-5` (variant: medium)       | `openai/gpt-6.1-sol` (variant: medium)             | `opencode-go/glm-5.3` (variant: medium)           |
+| `designer`     | `opencode/claude-sonnet-5-5` (variant: low)        | `opencode/gemini-3.1-pro` (variant: max)           | `opencode-go/kimi-k3` (variant: max)              |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode/claude-sonnet-5-5` (variant: low)        | `openai/gpt-6.1-sol` (variant: low)               |
+| `explorer`     | `openai/gpt-6-luna` (variant: medium)              | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/deepseek-v4.1-flash` (variant: high) |
+| `librarian`    | `openai/gpt-6-luna` (variant: high)                | `opencode/minimax-m3.1-flash-free` (variant: high) | `opencode-go/deepseek-v4.1-flash` (variant: high) |
+| `observer`     | `openai/gpt-6.1-sol` (variant: low)                | `opencode/gemini-3.8-flash` (variant: high)        | `opencode-go/minimax-m3` (variant: high)          |
+| `council`      | `opencode-go/deepseek-v4-pro` (variant: max)       | `opencode-go/kimi-k3` (variant: max)               | `opencode-go/glm-5.3` (variant: max)              |
 
 ### `low-cost` Preset
 
-Every preset agent in `low-cost` is pinned to a single model, at zero marginal cost beyond the Go subscription.
+Free OpenCode models only, so there is no metered spend beyond the Go subscription. `designer`, `explorer` and `librarian` are pinned to a single model with no fallback. All 8 built-in agents are active.
 
-| Agent(s)                                 | Model                             | Notes                                       |
-| ---------------------------------------- | --------------------------------- | ------------------------------------------- |
-| `orchestrator`, `designer`               | `opencode-go/minimax-m3`          |                                             |
-| `oracle`, `council`, `fixer`, `observer` | `opencode/mimo-v2.5-free`         | `fixer` and `observer` run at variant `max` |
-| `explorer`, `librarian`                  | `opencode/deepseek-v4-flash-free` | variant `high`                              |
+| Agent          | Primary                                               | Fallback 1                                            | Fallback 2                                        |
+| -------------- | ----------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------- |
+| `orchestrator` | `opencode/mimo-v2.6-flash-free` (variant: high)       | `opencode/nemotron-3.5-super-vl-free` (variant: high) | `opencode/minimax-m3.1-flash-free` (variant: max) |
+| `oracle`       | `opencode/big-pickle` (variant: max)                  | `opencode/mimo-v2.6-flash-free` (variant: high)       | `opencode/minimax-m3.1-flash-free` (variant: max) |
+| `designer`     | `opencode/mimo-v2.6-flash-free` (variant: max)        | -                                                     | -                                                 |
+| `fixer`        | `opencode/minimax-m3.1-flash-free` (variant: max)     | `opencode/big-pickle` (variant: max)                  | `opencode/mimo-v2.6-flash-free` (variant: max)    |
+| `explorer`     | `opencode/minimax-m3.1-flash-free` (variant: high)    | -                                                     | -                                                 |
+| `librarian`    | `opencode/nemotron-3.5-super-vl-free` (variant: high) | -                                                     | -                                                 |
+| `observer`     | `opencode/nemotron-3.5-super-vl-free` (variant: max)  | `opencode/mimo-v2.6-flash-free` (variant: max)        | -                                                 |
+| `council`      | `opencode/mimo-v2.6-flash-free` (variant: high)       | `opencode/minimax-m3.1-flash-free` (variant: max)     | -                                                 |
 
-`council` is unique to this preset: it stands in for a dedicated `oracle` when running fully free, and is not documented elsewhere in this README beyond this table. If you are relying on `council` for anything oracle-shaped, confirm its actual behavior against the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) rather than assuming parity with `oracle`.
+### `openai` Preset
+
+The shipped `preset`. OpenAI GPT-6 primaries with OpenCode Go and OpenCode (Zen) fallbacks. Needs OpenAI provider access. All 8 built-in agents are active.
+
+| Agent          | Primary                                | Fallback 1                                        | Fallback 2                                         |
+| -------------- | -------------------------------------- | ------------------------------------------------- | -------------------------------------------------- |
+| `orchestrator` | `openai/gpt-6.1-sol` (variant: max)    | `opencode-go/minimax-m3` (variant: high)          | -                                                  |
+| `oracle`       | `openai/gpt-6.1-sol` (variant: medium) | `opencode-go/mimo-v2.6-pro` (variant: high)       | `opencode-go/minimax-m3` (variant: high)           |
+| `designer`     | `openai/gpt-6.1-sol` (variant: medium) | `opencode-go/kimi-k3` (variant: max)              | `opencode-go/glm-5.3` (variant: max)               |
+| `fixer`        | `openai/gpt-6-luna` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: max) | `opencode/qwen3.8-flash` (variant: high)           |
+| `explorer`     | `openai/gpt-6-luna` (variant: high)    | `opencode/minimax-m3.1-flash-free` (variant: max) | `opencode/mimo-v2.6-flash-free` (variant: high)    |
+| `librarian`    | `openai/gpt-6-luna` (variant: high)    | `opencode/mimo-v2.6-flash-free` (variant: high)   | `opencode/minimax-m3.1-flash-free` (variant: high) |
+| `observer`     | `openai/gpt-6-luna` (variant: high)    | `opencode-go/minimax-m3` (variant: high)          | `opencode/gemini-3.8-flash` (variant: high)        |
+| `council`      | `openai/gpt-6.1-sol` (variant: medium) | `opencode-go/deepseek-v4-pro` (variant: max)      | `opencode-go/kimi-k3` (variant: max)               |
+
+### `frontier` Preset
+
+Two-model chains of `claude-code/*` and `openai/*` models, with no Go or Zen fallback. Needs Claude Code and OpenAI provider access. All 8 built-in agents are active.
+
+| Agent          | Primary                                             | Fallback 1                                          | Fallback 2 |
+| -------------- | --------------------------------------------------- | --------------------------------------------------- | ---------- |
+| `orchestrator` | `openai/gpt-6.1-sol` (variant: medium)              | `claude-code/claude-opus-5-5[1m]` (variant: medium) | -          |
+| `oracle`       | `claude-code/claude-opus-5-5[1m]` (variant: medium) | `openai/gpt-6-astra` (variant: medium)              | -          |
+| `designer`     | `claude-code/claude-sonnet-5-5` (variant: medium)   | `openai/gpt-6.1-sol` (variant: medium)              | -          |
+| `fixer`        | `claude-code/claude-haiku-5-5` (variant: medium)    | `openai/gpt-6-luna` (variant: medium)               | -          |
+| `explorer`     | `openai/gpt-6-luna` (variant: medium)               | `claude-code/claude-haiku-5-5` (variant: medium)    | -          |
+| `librarian`    | `openai/gpt-6.1-sol` (variant: medium)              | -                                                   | -          |
+| `observer`     | `openai/gpt-6-luna` (variant: high)                 | `claude-code/claude-haiku-5-5` (variant: high)      | -          |
+| `council`      | `claude-code/claude-opus-5-5[1m]` (variant: medium) | `openai/gpt-6-astra` (variant: medium)              | -          |
 
 ## The Custom Agents
 
-Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each agent come from `.opencode/agents/<name>.md`** (which `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
+Grouped by lane. Lane assignments and one-liners are derived from the agent names in the tracked [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc). The full `orchestratorPrompt` for each (sourced from [ninjasitm/ai-assisted-dev-toolkit](https://github.com/ninjasitm/ai-assisted-dev-toolkit/)'s `src/repo/.claude/agents/<name>.agent.md`) is in the JSON under `agents.<name>.orchestratorPrompt`; the one-liners below are the scan-friendly summaries. **The full prompt body and model for each custom agent come from `.opencode/agents/<name>.md`, which the NITM AI-Assisted Development Toolkit supplies** (each file `@`-references the matching `.claude/agents-snippets/<name>.md`); OMO slim only adds the `orchestratorPrompt` routing hint on top.
 
 ### Codegen
 
@@ -307,7 +347,7 @@ Grouped by lane. Lane assignments and one-liners are derived from the agent name
 | `@green`              | Greenfield scaffolding. New repo, blank slate, want a working starting point. |
 | `@frontend-developer` | Frontend implementation. React, Vue, CSS, accessibility.                      |
 | `@backend-architect`  | Backend system design. Service boundaries, data flow, contracts.              |
-| `@feature-builder`    | End-to-end feature factory. Cross-stack change with no special expertise.     |
+| `@feature-builder`    | End-to-end feature pipeline. Cross-stack change with no special expertise.     |
 | `@tdd`                | Red-green-refactor. Strict test-first.                                        |
 | `@refactor`           | Tech-debt cleanup. Behavior-preserving.                                       |
 | `@implementer`        | General-purpose fallback. When nothing else fits.                             |
@@ -389,7 +429,7 @@ For ongoing maintenance, this README is checked by:
 - **`markdownlint`** with a custom config (100-col soft wrap, allow `<details>`).
 - **`lychee`** for external link checks.
 - **A JSON-parse snippet check** that extracts every fenced ` ```jsonc ` block, strips `//` comments, and asserts the result is valid.
-- **A preset-table cross-check** that reads [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) and asserts: (a) all four presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows. Cross-check against `.opencode/agents/*.md` when present in the same repo (i.e. if the NITM AI-Assisted Development Toolkit is vendored here): the 14 custom agents' `name`, `model`, `mode`, and `permission` keys should be consistent across both sources. [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is the fallback when `.opencode/agents/` is absent.
+- **A preset-table cross-check** that reads [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) and asserts: (a) all six presets are present, (b) every preset defines the same 22-agent roster, (c) every `model` array is non-empty, (d) the `orchestratorPrompt` for each of the 14 custom agents is a non-empty string. The check should diff agent-by-agent, not just count rows. Cross-check against `.opencode/agents/*.md` when present in the same repo (i.e. if the NITM AI-Assisted Development Toolkit is vendored here): the 14 custom agents' `name`, `model`, `mode`, and `permission` keys should be consistent across both sources. [oh-my-opencode-slim.jsonc](./oh-my-opencode-slim.jsonc) is the fallback when `.opencode/agents/` is absent.
 
 # Related
 
